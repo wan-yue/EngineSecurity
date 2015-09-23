@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tables>
+    <route id="37" fromName="INSTANCE_ID" toName="INSTANCE_ID" fromElementId="36" toElementId="31" fromElement="T_WF_MYAPPLY" toElement="T_WF_INSTANCE"/>
+    <route id="35" fromName="INSTANCE_ID" toName="INSTANCE_ID" fromElementId="34" toElementId="31" fromElement="T_WF_OPINION" toElement="T_WF_INSTANCE"/>
+    <route id="30" fromName="STEP_ID" toName="STEP_ID" fromElementId="28" toElementId="8" fromElement="T_WF_STEPFORM" toElement="T_WF_STEP"/>
+    <route id="29" fromName="FORM_ID" toName="FORM_ID" fromElementId="28" toElementId="27" fromElement="T_WF_STEPFORM" toElement="T_WF_FORM"/>
+    <route id="26" fromName="STEP_ID" toName="STEP_ID" fromElementId="25" toElementId="8" fromElement="T_WF_STEPROLE" toElement="T_WF_STEP"/>
+    <route id="14" fromName="FLOW_ID" toName="FLOW_ID" fromElementId="9" toElementId="7" fromElement="T_WF_ACTION" toElement="T_WF_FLOW"/>
+    <route id="13" fromName="FLOW_ID" toName="FLOW_ID" fromElementId="8" toElementId="7" fromElement="T_WF_STEP" toElement="T_WF_FLOW"/>
+    <route id="19" fromName="STEP_TYPEID" toName="STEP_TYPEID" fromElementId="8" toElementId="15" fromElement="T_WF_STEP" toElement="T_WF_STEPTYPE"/>
+    <route id="20" fromName="ACTION_TYPEID" toName="ACTION_TYPEID" fromElementId="9" toElementId="16" fromElement="T_WF_ACTION" toElement="T_WF_ACTIONTYPE"/>
+    <route id="32" fromName="STEP_ID" toName="STEP_ID" fromElementId="31" toElementId="8" fromElement="T_WF_INSTANCE" toElement="T_WF_STEP"/>
+    <route id="33" fromName="FLOW_ID" toName="FLOW_ID" fromElementId="31" toElementId="7" fromElement="T_WF_INSTANCE" toElement="T_WF_FLOW"/>
+    <table id="7" name="T_WF_FLOW" desc="流程管理" clientState="1" state="1" x="467" y="244" width="100" height="128">
+        <column name="FLOW_ID" desc="流程ID" type="int" length="11" isNull="false" isPk="true" isFk="false" rountId="0"/>
+        <column name="FLOW_NAME" desc="流程名称" type="varchar" length="20" isNull="true" isPk="false" isFk="false" rountId="0"/>
+        <column name="CREATETIME" desc="流程创建的时间" type="date" length="20" isNull="true" isPk="false" isFk="false" rountId="0"/>
+        <column name="DELETETIME" desc="流程删除的时间" type="date" length="20" isNull="true" isPk="false" isFk="false" rountId="0"/>
+        <column name="STATE" desc="流程状态值" type="int" length="11" isNull="true" isPk="false" isFk="false" rountId="0"/>
+    </table>
+    <table id="8" name="T_WF_STEP" desc="步骤管理" clientState="1" state="1" x="687" y="63" width="100" height="144">
+        <column name="STEP_ID" desc="步骤ID" type="int" length="11" isNull="false" isPk="true" isFk="false" rountId="0"/>
+        <column name="STEP_NAME" desc="步骤名称" type="varchar" length="20" isNull="true" isPk="false" isFk="false" rountId="0"/>
+        <column name="STEP_TYPEID" desc="步骤类型ID" type="int" length="11" isNull="false" isPk="false" isFk="true" rountId="19"/>
+        <column name="STEP_LEFT" desc="左边距" type="int" length="11" isNull="true" isPk="false" isFk="false" rountId="0"/>
+        <column name="STEP_TOP" desc="上边距" type="int" length="11" isNull="true" isPk="false" isFk="false" rountId="0"/>
+        <column name="FLOW_ID" desc="流程ID" type="int" length="11" isNull="false" isPk="false" isFk="true" rountId="13"/>
+    </table>
+    <table id="9" name="T_WF_ACTION" desc="动作管理" clientState="1" state="1" x="733" y="298" width="100" height="176">
+        <column name="ACTION_ID" desc="动作ID" type="int" length="11" isNull="false" isPk="true" isFk="false" rountId="0"/>
+        <column name="ACTION_NAME" desc="动作名称" type="varchar" length="20" isNull="true" isPk="false" isFk="false" rountId="0"/>
+        <column name="ACTION_TYPEID" desc="动作类型" type="int" length="11" isNull="false" isPk="false" isFk="true" rountId="20"/>
+        <column name="ACTION_FROMSTEP" desc="上一步骤ID" type="int" length="11" isNull="true" isPk="false" isFk="false" rountId="0"/>
+        <column name="ACTION_TOSTEP" desc="下一步骤ID" type="int" length="11" isNull="true" isPk="false" isFk="false" rountId="0"/>
+        <column name="ACTION_LEFT" desc="左边距" type="int" length="11" isNull="true" isPk="false" isFk="false" rountId="0"/>
+        <column name="ACTION_TOP" desc="上边距" type="int" length="11" isNull="true" isPk="false" isFk="false" rountId="0"/>
+        <column name="FLOW_ID" desc="流程ID" type="int" length="11" isNull="false" isPk="false" isFk="true" rountId="14"/>
+    </table>
+    <table id="15" name="T_WF_STEPTYPE" desc="步骤类型" clientState="1" state="1" x="933" y="-7" width="100" height="100">
+        <column name="STEP_TYPEID" desc="步骤类型ID" type="int" length="11" isNull="false" isPk="true" isFk="false" rountId="0"/>
+        <column name="STEP_TYPENAME" desc="步骤类型名称" type="varchar" length="20" isNull="true" isPk="false" isFk="false" rountId="0"/>
+    </table>
+    <table id="16" name="T_WF_ACTIONTYPE" desc="动作类型" clientState="1" state="1" x="953" y="345" width="100" height="100">
+        <column name="ACTION_TYPEID" desc="动作类型ID" type="int" length="11" isNull="false" isPk="true" isFk="false" rountId="0"/>
+        <column name="ACTION_TYPENAME" desc="动作类型名称" type="varchar" length="20" isNull="true" isPk="false" isFk="false" rountId="0"/>
+    </table>
+    <table id="25" name="T_WF_STEPROLE" desc="步骤角色关系" clientState="1" state="1" x="1077" y="65" width="100" height="100">
+        <column name="STEP_ROLE_ID" desc="步骤角色关系ID" type="int" length="11" isNull="false" isPk="true" isFk="false" rountId="0"/>
+        <column name="STEP_ID" desc="步骤ID" type="int" length="11" isNull="false" isPk="false" isFk="true" rountId="26"/>
+        <column name="ROLE_ID" desc="角色ID" type="int" length="11" isNull="true" isPk="false" isFk="false" rountId="0"/>
+    </table>
+    <table id="27" name="T_WF_FORM" desc="表单管理" clientState="1" state="1" x="1174" y="305" width="100" height="128">
+        <column name="FORM_ID" desc="表单ID" type="int" length="11" isNull="false" isPk="true" isFk="false" rountId="0"/>
+        <column name="FORM_NAME" desc="表单名称" type="varchar" length="20" isNull="true" isPk="false" isFk="false" rountId="0"/>
+        <column name="FORM_TYPE" desc="表单类型" type="int" length="11" isNull="true" isPk="false" isFk="false" rountId="0"/>
+        <column name="FORM_ADDR" desc="表单地址" type="varchar" length="200" isNull="true" isPk="false" isFk="false" rountId="0"/>
+        <column name="FORM_DESC" desc="字段描述" type="varchar" length="200" isNull="true" isPk="false" isFk="false" rountId="0"/>
+    </table>
+    <table id="28" name="T_WF_STEPFORM" desc="步骤表单关系" clientState="1" state="1" x="964" y="207" width="100" height="100">
+        <column name="STEP_FORM_ID" desc="步骤表单ID" type="int" length="11" isNull="false" isPk="true" isFk="false" rountId="0"/>
+        <column name="STEP_ID" desc="步骤ID" type="int" length="11" isNull="false" isPk="false" isFk="true" rountId="30"/>
+        <column name="FORM_ID" desc="表单ID" type="int" length="11" isNull="false" isPk="false" isFk="true" rountId="29"/>
+    </table>
+    <table id="31" name="T_WF_INSTANCE" desc="流程实例管理" clientState="1" state="1" x="423" y="32" width="100" height="144">
+        <column name="INSTANCE_ID" desc="流程实例ID" type="int" length="11" isNull="false" isPk="true" isFk="false" rountId="0"/>
+        <column name="FLOW_ID" desc="流程ID" type="int" length="11" isNull="false" isPk="false" isFk="true" rountId="33"/>
+        <column name="STEP_ID" desc="步骤ID" type="int" length="11" isNull="false" isPk="false" isFk="true" rountId="32"/>
+        <column name="CREATETIME" desc="流程开始的时间" type="date" length="20" isNull="true" isPk="false" isFk="false" rountId="0"/>
+        <column name="STARTTIME" desc="步骤开始时间" type="date" length="20" isNull="true" isPk="false" isFk="false" rountId="0"/>
+        <column name="ENDTIME" desc="流程结束时间" type="date" length="20" isNull="true" isPk="false" isFk="false" rountId="0"/>
+    </table>
+    <table id="34" name="T_WF_OPINION" desc="处理日志" clientState="1" state="1" x="247" y="292" width="100" height="144">
+        <column name="INSTANCE_ID" desc="实例Id" type="int" length="11" isNull="false" isPk="false" isFk="true" rountId="35"/>
+        <column name="OPINION_DESC" desc="意见描述" type="varchar" length="500" isNull="true" isPk="false" isFk="false" rountId="0"/>
+        <column name="OPINION_ID" desc="意见Id" type="int" length="11" isNull="false" isPk="true" isFk="false" rountId="0"/>
+        <column name="OPINION_TIME" desc="意见时间" type="date" length="20" isNull="true" isPk="false" isFk="false" rountId="0"/>
+        <column name="OPINION_TYPE" desc="意见类型" type="int" length="11" isNull="true" isPk="false" isFk="false" rountId="0"/>
+        <column name="USER_ID" desc="人员Id" type="int" length="11" isNull="true" isPk="false" isFk="false" rountId="0"/>
+    </table>
+    <table id="36" name="T_WF_MYAPPLY" desc="用户申请的流程" clientState="1" state="1" x="180" y="125" width="100" height="100">
+        <column name="MYAPPLY_ID" desc="用户申请流程的ID" type="int" length="11" isNull="false" isPk="true" isFk="false" rountId="0"/>
+        <column name="USER_ID" desc="用户ID" type="int" length="11" isNull="true" isPk="false" isFk="false" rountId="0"/>
+        <column name="INSTANCE_ID" desc="流程实例ID" type="int" length="11" isNull="false" isPk="false" isFk="true" rountId="37"/>
+    </table>
+</tables>

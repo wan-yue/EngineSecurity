@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="T_SYS_RESOURCEROLE">
+    <!--资源角色信息配置文件开始-->
+    <!--别名-->
+    <typeAlias alias="hashmap" type="java.util.HashMap" />
+
+    <!-- 查询【资源角色信息】所有数据-->
+    <select id="selectAll"  parameterClass="hashmap" resultClass="hashmap">
+    	SELECT * FROM(
+			SELECT ROWNUM ROW_NUM,B.* FROM(
+			       SELECT A.RESOURCE_ROLE_ID,A.RESOURCE_ID,B.RESOURCE_NAME,A.ROLE_ID,C.ROLE_NAME FROM T_SYS_RESOURCEROLE A 
+    				LEFT JOIN T_SYS_RESOURCE B ON A.RESOURCE_ID = B.RESOURCE_ID 
+    				LEFT JOIN T_SYS_ROLE C ON A.ROLE_ID = C.ROLE_ID 
+			       <isNotEmpty prepend="" property="order">
+	    				$order$
+	    		   </isNotEmpty>
+	    		   <isEmpty prepend="" property="order">
+	    		   		ORDER BY RESOURCE_ROLE_ID  DESC
+	    		   </isEmpty>
+			) B   	
+			<isNotEmpty prepend="WHERE" property="filter">
+	    		($filter$)
+	    	</isNotEmpty>
+    	) 
+    	<isNotEmpty prepend="WHERE" property="start">
+    		ROW_NUM BETWEEN  (#start#+1) and (#start#+#limit#)
+    	</isNotEmpty>
+    </select>
+    <select id="selectAllTotal" parameterClass="hashmap" resultClass="int">
+    	SELECT COUNT(1) FROM (
+    		SELECT A.RESOURCE_ROLE_ID,A.RESOURCE_ID,A.ROLE_ID FROM T_SYS_RESOURCEROLE A 
+    		<isNotEmpty prepend="WHERE" property="filter">
+    		    	($filter$)
+    		</isNotEmpty>
+    	) B
+    </select>
+    <!--根据ID删除【资源角色信息】-->
+    <select id="selectById" resultClass="hashmap">
+    	SELECT A.RESOURCE_ROLE_ID,A.RESOURCE_ID,A.ROLE_ID FROM T_SYS_RESOURCEROLE A WHERE A.RESOURCE_ROLE_ID = #RESOURCE_ROLE_ID#
+    </select>
+    <!--添加【资源角色信息】-->
+	<insert id="insert" parameterClass="hashmap">
+		<selectKey  resultClass ="string"  keyProperty ="RESOURCE_ROLE_ID" >   <![CDATA[ SELECT SYS_GUID() AS RESOURCE_ROLE_ID FROM DUAL ]]>     </selectKey >
+		INSERT INTO T_SYS_RESOURCEROLE(RESOURCE_ROLE_ID,RESOURCE_ID,ROLE_ID) 
+		VALUES (#RESOURCE_ROLE_ID:VARCHAR#,#RESOURCE_ID:VARCHAR#,#ROLE_ID:VARCHAR#)
+    </insert>
+    <!--删除-->
+    <delete id="delete" parameterClass="hashmap">
+		DELETE FROM T_SYS_RESOURCEROLE 
+		<dynamic prepend="WHERE">
+			<isNotEmpty property="ROLE_ID" prepend="AND">
+				ROLE_ID = #ROLE_ID#
+			</isNotEmpty>
+			<isNotEmpty property="RESOURCE_ID" prepend="AND">
+				RESOURCE_ID = #RESOURCE_ID#
+			</isNotEmpty>
+		</dynamic>
+	</delete>
+    <!--修改【资源角色信息】-->
+	<update id="update" parameterClass="hashmap">
+		UPDATE  T_SYS_RESOURCEROLE SET RESOURCE_ID = #RESOURCE_ID:VARCHAR#,ROLE_ID = #ROLE_ID:VARCHAR#
+		WHERE  RESOURCE_ROLE_ID = #RESOURCE_ROLE_ID#
+	</update>
+	<!-- 通过外键查询 【资源角色信息】-->
+	<select id="selectByFk" parameterClass="hashmap" resultClass="hashmap">
+    	SELECT A.RESOURCE_ROLE_ID,A.RESOURCE_ID,A.ROLE_ID FROM T_SYS_RESOURCEROLE A 
+    	<dynamic prepend="WHERE">
+			<isNotEmpty property="ROLE_ID" prepend="AND">
+				ROLE_ID = #ROLE_ID#
+			</isNotEmpty>
+			<isNotEmpty property="RESOURCE_ID" prepend="AND">
+				RESOURCE_ID = #RESOURCE_ID#
+			</isNotEmpty>
+		</dynamic>
+    </select>
+</sqlMap>

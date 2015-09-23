@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tables>
+    <route id="75" fromName="DEPARTMENT_ID" toName="DEPARTMENT_ID" fromElementId="6" toElementId="5" fromElement="T_SYS_USERINFO" toElement="T_SYS_DEPARTMENT"/>
+    <route id="74" fromName="ROLE_TYPE_ID" toName="ROLE_TYPE_ID" fromElementId="27" toElementId="26" fromElement="T_SYS_ROLE" toElement="T_SYS_ROLETYPE"/>
+    <route id="70" fromName="RESOURCE_TYPE_ID" toName="RESOURCE_TYPE_ID" fromElementId="40" toElementId="42" fromElement="T_SYS_RESOURCE" toElement="T_SYS_RESOURCETYPE"/>
+    <route id="71" fromName="RESOURCE_ID" toName="RESOURCE_ID" fromElementId="41" toElementId="40" fromElement="T_SYS_RESOURCEROLE" toElement="T_SYS_RESOURCE"/>
+    <route id="72" fromName="ROLE_ID" toName="ROLE_ID" fromElementId="41" toElementId="27" fromElement="T_SYS_RESOURCEROLE" toElement="T_SYS_ROLE"/>
+    <route id="78" fromName="RESOURCE_ID" toName="RESOURCE_ID" fromElementId="77" toElementId="40" fromElement="T_SYS_USERRESOURCE" toElement="T_SYS_RESOURCE"/>
+    <route id="79" fromName="USER_ID" toName="USER_ID" fromElementId="77" toElementId="6" fromElement="T_SYS_USERRESOURCE" toElement="T_SYS_USERINFO"/>
+    <route id="80" fromName="ROLE_ID" toName="ROLE_ID" fromElementId="77" toElementId="27" fromElement="T_SYS_USERRESOURCE" toElement="T_SYS_ROLE"/>
+    <route id="81" fromName="USER_ID" toName="USER_ID" fromElementId="28" toElementId="6" fromElement="T_SYS_USERROLE" toElement="T_SYS_USERINFO"/>
+    <route id="82" fromName="ROLE_ID" toName="ROLE_ID" fromElementId="28" toElementId="27" fromElement="T_SYS_USERROLE" toElement="T_SYS_ROLE"/>
+    <table id="67" name="T_SYS_PERSON" desc="人员信息" clientState="1" state="1" x="1045" y="27" width="100" height="240">
+        <column name="PERSON_ID" desc="人员ID" type="int" length="11" isNull="false" isPk="true" isFk="false" rountId="0"/>
+        <column name="PERSON_UUID" desc="人员UUID" type="varchar" length="100" isNull="true" isPk="false" isFk="false" rountId="0"/>
+        <column name="PERSON_NAME" desc="姓名" type="varchar" length="20" isNull="true" isPk="false" isFk="false" rountId="0"/>
+        <column name="IDCARD" desc="身份证号" type="varchar" length="20" isNull="true" isPk="false" isFk="false" rountId="0"/>
+        <column name="PEROSN_PIC" desc="头像地址" type="varchar" length="500" isNull="true" isPk="false" isFk="false" rountId="0"/>
+        <column name="POST_DATE" desc="入职时间" type="date" length="20" isNull="true" isPk="false" isFk="false" rountId="0"/>
+        <column name="DEPARTMENT_ID" desc="所属部门" type="int" length="11" isNull="true" isPk="false" isFk="false" rountId="76"/>
+        <column name="SEX" desc="性别" type="varchar" length="4" isNull="true" isPk="false" isFk="false" rountId="0"/>
+        <column name="BIRTHDAY" desc="出生年月日" type="date" length="20" isNull="true" isPk="false" isFk="false" rountId="0"/>
+        <column name="EMAIL" desc="邮箱" type="varchar" length="100" isNull="true" isPk="false" isFk="false" rountId="0"/>
+        <column name="PHONE" desc="手机" type="varchar" length="20" isNull="true" isPk="false" isFk="false" rountId="0"/>
+        <column name="QQ" desc="QQ号" type="varchar" length="20" isNull="true" isPk="false" isFk="false" rountId="0"/>
+    </table>
+    <table id="42" name="T_SYS_RESOURCETYPE" desc="资源类型信息" clientState="1" state="1" x="78" y="150" width="100" height="100">
+        <column name="RESOURCE_TYPE_ID" desc="资源类型ID" type="int" length="11" isNull="false" isPk="true" isFk="false" rountId="0"/>
+        <column name="RESOURCE_TYPE_NAME" desc="资源类型名称" type="varchar" length="50" isNull="true" isPk="false" isFk="false" rountId="0"/>
+    </table>
+    <table id="41" name="T_SYS_RESOURCEROLE" desc="资源角色信息" clientState="1" state="1" x="461" y="325" width="100" height="100">
+        <column name="RESOURCE_ROLE_ID" desc="资源角色ID" type="int" length="11" isNull="false" isPk="true" isFk="false" rountId="0"/>
+        <column name="RESOURCE_ID" desc="资源ID" type="int" length="11" isNull="false" isPk="false" isFk="true" rountId="71"/>
+        <column name="ROLE_ID" desc="角色ID" type="int" length="11" isNull="false" isPk="false" isFk="true" rountId="72"/>
+    </table>
+    <table id="40" name="T_SYS_RESOURCE" desc="资源信息" clientState="1" state="1" x="272" y="125" width="100" height="208">
+        <column name="RESOURCE_ID" desc="资源ID" type="int" length="11" isNull="false" isPk="true" isFk="false" rountId="0"/>
+        <column name="RESOURCE_CODE" desc="资源编码" type="varchar" length="100" isNull="true" isPk="false" isFk="false" rountId="0"/>
+        <column name="RESOURCE_TYPE_ID" desc="资源类型ID" type="int" length="11" isNull="false" isPk="false" isFk="true" rountId="70"/>
+        <column name="RESOURCE_NAME" desc="资源名称" type="varchar" length="100" isNull="true" isPk="false" isFk="false" rountId="0"/>
+        <column name="RESOURCE_ADDR" desc="资源地址" type="varchar" length="200" isNull="true" isPk="false" isFk="false" rountId="0"/>
+        <column name="RESOURCE_HELPINFO" desc="帮助信息" type="varchar" length="2000" isNull="true" isPk="false" isFk="false" rountId="0"/>
+        <column name="SECURITY_NAME" desc="权限名称" type="varchar" length="200" isNull="true" isPk="false" isFk="false" rountId="0"/>
+        <column name="PID" desc="父菜单ID" type="int" length="11" isNull="true" isPk="false" isFk="false" rountId="0"/>
+        <column name="CACHE" desc="是否缓存" type="int" length="11" isNull="true" isPk="false" isFk="false" rountId="0"/>
+        <column name="FACETYPE" desc="使用的FACE类型" type="varchar" length="50" isNull="true" isPk="false" isFk="false" rountId="0"/>
+    </table>
+    <table id="28" name="T_SYS_USERROLE" desc="用户角色信息" clientState="1" state="1" x="863" y="224" width="100" height="100">
+        <column name="USER_ROLE_ID" desc="用户角色ID" type="int" length="11" isNull="false" isPk="true" isFk="false" rountId="0"/>
+        <column name="USER_ID" desc="用户ID" type="int" length="11" isNull="false" isPk="false" isFk="true" rountId="81"/>
+        <column name="ROLE_ID" desc="角色ID" type="int" length="11" isNull="false" isPk="false" isFk="true" rountId="82"/>
+    </table>
+    <table id="27" name="T_SYS_ROLE" desc="角色信息" clientState="1" state="1" x="644" y="260" width="100" height="176">
+        <column name="ROLE_ID" desc="角色ID" type="int" length="11" isNull="false" isPk="true" isFk="false" rountId="0"/>
+        <column name="ROLE_TYPE_ID" desc="角色类型ID" type="int" length="11" isNull="false" isPk="false" isFk="true" rountId="74"/>
+        <column name="ROLE_NAME" desc="角色名称" type="varchar" length="20" isNull="true" isPk="false" isFk="false" rountId="0"/>
+        <column name="PID" desc="父角色ID" type="int" length="11" isNull="true" isPk="false" isFk="false" rountId="0"/>
+        <column name="ROLE_DESC" desc="角色描述" type="varchar" length="200" isNull="true" isPk="false" isFk="false" rountId="0"/>
+        <column name="BE_USE" desc="角色锁定" type="int" length="11" isNull="true" isPk="false" isFk="false" rountId="0"/>
+        <column name="ROLE_CODE" desc="角色编码" type="varchar" length="50" isNull="true" isPk="false" isFk="false" rountId="0"/>
+        <column name="STATE" desc="角色状态" type="int" length="11" isNull="true" isPk="false" isFk="false" rountId="0"/>
+    </table>
+    <table id="26" name="T_SYS_ROLETYPE" desc="角色类型信息" clientState="1" state="1" x="824" y="426" width="100" height="100">
+        <column name="ROLE_TYPE_ID" desc="角色类型ID" type="int" length="11" isNull="false" isPk="true" isFk="false" rountId="0"/>
+        <column name="ROLE_TYPE_NAME" desc="角色类型名称" type="varchar" length="20" isNull="true" isPk="false" isFk="false" rountId="0"/>
+        <column name="ROLE_TYPE_DESC" desc="角色类型描述" type="varchar" length="200" isNull="true" isPk="false" isFk="false" rountId="0"/>
+    </table>
+    <table id="6" name="T_SYS_USERINFO" desc="用户信息" clientState="1" state="1" x="646" y="-4" width="100" height="192">
+        <column name="USER_ID" desc="用户ID" type="int" length="11" isNull="false" isPk="true" isFk="false" rountId="0"/>
+        <column name="USER_NAME" desc="用户姓名" type="varchar" length="50" isNull="true" isPk="false" isFk="false" rountId="0"/>
+        <column name="LOGIN_NAME" desc="登陆账号" type="varchar" length="20" isNull="true" isPk="false" isFk="false" rountId="0"/>
+        <column name="PASSWORD" desc="密码" type="varchar" length="50" isNull="true" isPk="false" isFk="false" rountId="0"/>
+        <column name="EXPIRED" desc="账号有效期" type="date" length="20" isNull="true" isPk="false" isFk="false" rountId="0"/>
+        <column name="BE_USE" desc="是否启用" type="int" length="11" isNull="true" isPk="false" isFk="false" rountId="0"/>
+        <column name="MODIFY_TIME" desc="上次密码修改时间" type="date" length="20" isNull="true" isPk="false" isFk="false" rountId="0"/>
+        <column name="DEPARTMENT_ID" desc="部门ID" type="int" length="11" isNull="false" isPk="false" isFk="true" rountId="75"/>
+        <column name="STATE" desc="用户状态" type="int" length="11" isNull="true" isPk="false" isFk="false" rountId="0"/>
+    </table>
+    <table id="5" name="T_SYS_DEPARTMENT" desc="部门信息" clientState="1" state="1" x="867" y="27" width="100" height="160">
+        <column name="DEPARTMENT_ID" desc="部门ID" type="int" length="11" isNull="false" isPk="true" isFk="false" rountId="0"/>
+        <column name="DEPARTMENT_UUID" desc="部门UUID" type="varchar" length="100" isNull="true" isPk="false" isFk="false" rountId="0"/>
+        <column name="DEPARTMENT_CODE" desc="部门编码" type="varchar" length="50" isNull="true" isPk="false" isFk="false" rountId="0"/>
+        <column name="DEPARTMENT_NAME" desc="部门名称" type="varchar" length="200" isNull="true" isPk="false" isFk="false" rountId="0"/>
+        <column name="PID" desc="父ID" type="int" length="11" isNull="true" isPk="false" isFk="false" rountId="0"/>
+        <column name="LEVEL_ID" desc="层级ID" type="int" length="11" isNull="true" isPk="false" isFk="false" rountId="0"/>
+        <column name="ORDER_ID" desc="排序号" type="int" length="11" isNull="true" isPk="false" isFk="false" rountId="0"/>
+    </table>
+    <table id="68" name="T_SYS_MESSAGE" desc="消息表管理" clientState="1" state="1" x="1159" y="245" width="100" height="208">
+        <column name="MSG_ID" desc="消息ID" type="int" length="11" isNull="false" isPk="true" isFk="false" rountId="0"/>
+        <column name="MSG_TITLE" desc="消息标题" type="varchar" length="400" isNull="true" isPk="false" isFk="false" rountId="0"/>
+        <column name="MSG_ADDR" desc="链接地址" type="varchar" length="800" isNull="true" isPk="false" isFk="false" rountId="0"/>
+        <column name="MSG_ADDR_PARAM" desc="链接地址参数" type="varchar" length="800" isNull="true" isPk="false" isFk="false" rountId="0"/>
+        <column name="MSG_RECIPIENT" desc="收件人" type="int" length="11" isNull="true" isPk="false" isFk="false" rountId="0"/>
+        <column name="MSG_SENDER" desc="发件人" type="int" length="11" isNull="true" isPk="false" isFk="false" rountId="0"/>
+        <column name="SEND_DATE" desc="发送时间" type="date" length="20" isNull="true" isPk="false" isFk="false" rountId="0"/>
+        <column name="SYS_NAME" desc="系统简称" type="varchar" length="50" isNull="true" isPk="false" isFk="false" rountId="0"/>
+        <column name="IS_VIEW" desc="是否查看" type="boolean" length="1" isNull="true" isPk="false" isFk="false" rountId="0"/>
+        <column name="MSG_TOKEN" desc="发给同一角色的相同消息" type="varchar" length="50" isNull="true" isPk="false" isFk="false" rountId="0"/>
+    </table>
+    <table id="69" name="T_SYS_REMIND" desc="提醒管理" clientState="1" state="1" x="1018" y="368" width="100" height="128">
+        <column name="REMIND_ID" desc="提醒ID" type="int" length="11" isNull="false" isPk="true" isFk="false" rountId="0"/>
+        <column name="SYS_NAME" desc="系统简称" type="varchar" length="50" isNull="true" isPk="false" isFk="false" rountId="0"/>
+        <column name="LINK_ADDR" desc="链接地址" type="varchar" length="800" isNull="true" isPk="false" isFk="false" rountId="0"/>
+        <column name="USER_ID" desc="用户ID" type="int" length="11" isNull="true" isPk="false" isFk="false" rountId="0"/>
+        <column name="REMIND_SIZE" desc="提醒数量" type="int" length="11" isNull="true" isPk="false" isFk="false" rountId="0"/>
+    </table>
+    <table id="77" name="T_SYS_USERRESOURCE" desc="用户资源表" clientState="1" state="1" x="441" y="40" width="100" height="176">
+        <column name="USER_RESOURCE_ID" desc="字段描述" type="int" length="11" isNull="false" isPk="true" isFk="false" rountId="0"/>
+        <column name="USER_ID" desc="用户ID" type="int" length="11" isNull="false" isPk="false" isFk="true" rountId="79"/>
+        <column name="RESOURCE_ID" desc="资源ID" type="int" length="11" isNull="false" isPk="false" isFk="true" rountId="78"/>
+        <column name="ROLE_ID" desc="角色ID" type="int" length="11" isNull="false" isPk="false" isFk="true" rountId="80"/>
+        <column name="FACETYPE" desc="模板类型" type="varchar" length="50" isNull="true" isPk="false" isFk="false" rountId="0"/>
+        <column name="DESKTOP" desc="是否显示在桌面" type="int" length="11" isNull="true" isPk="false" isFk="false" rountId="0"/>
+        <column name="ICON" desc="显示图标" type="varchar" length="200" isNull="true" isPk="false" isFk="false" rountId="0"/>
+        <column name="SORT_NUM" desc="排序" type="int" length="11" isNull="true" isPk="false" isFk="false" rountId="0"/>
+    </table>
+</tables>

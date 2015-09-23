@@ -1,0 +1,92 @@
+<?xml version="1.0" ?>
+<!--
+////////////////////////////////////////////////////////////////////////////////
+//
+// Read more about ArcGIS Viewer for Flex - http://links.esri.com/flexviewer
+////////////////////////////////////////////////////////////////////////////////
+-->
+<configuration>
+    <title>数字航道GIS</title>
+    <subtitle>测试demo</subtitle>
+    <logo>assets/images/logo.png</logo>
+    <style>
+        <colors>0xffffff,0x103c87,0x359dc6,0x294867,0xffffff</colors>
+    	<alpha>0.8</alpha>
+    	<font name="宋体" size="12"></font>
+    	<titlefont name="宋体" size="22"></titlefont>
+    </style>
+    <!-- replace the following url with your own geometryservice -->
+    <geometryservice url="http://www.cjienc.com/agsrest/services/Geometry/GeometryServer" />
+
+    <!-- UI elements -->
+    <widget left="10"  top="50"    config="widgets/Navigation/NavigationWidget.xml" url="widgets/Navigation/NavigationWidget.swf"/>
+    <widget right="0" bottom="0"   config="widgets/OverviewMap/OverviewMapWidget.xml" url="widgets/OverviewMap/OverviewMapWidget.swf"/>
+    <widget left="0"   top="0"     config="widgets/HeaderController/HeaderControllerWidget.xml" url="widgets/HeaderController/HeaderControllerWidget.swf"/>
+    <widget right="20" top="55"    config="widgets/MapSwitcher/MapSwitcherWidget.xml" url="widgets/MapSwitcher/MapSwitcherWidget.swf"/>
+    
+    <map
+		initialextent="114.21185541117767 30.506575493041982 114.33015051826841 30.573346014447853"
+		fullextent="103.87588002846373 19.45228966609097 121.40686460052386 41.24664597260153"
+		top="40" wraparound180="true" esrilogovisible="false">
+		<basemaps>
+			<layer label="电子江图" type="tiled" visible="true"
+				url="http://www.cjienc.com/agsrest/services/cjinobeacon/MapServer" />
+		</basemaps>
+		<!-- 
+		<operationallayers>
+			<layer label="图幅框" type="feature" visible="false" alpha="0.6"
+				url="http://www.cjienc.com/agsrest/services/frames/MapServer/0" />
+		</operationallayers>
+		 -->
+	</map>
+
+    <!-- widgets organized into widget containers that manage close/open etc -->
+    <!-- supported layout property options: horizontal(default)|float|vertical|fix-->
+    <widgetcontainer layout="float">
+        <widget label="书签"         left="430" top="90"
+                icon="assets/images/i_bookmark.png"
+                config="widgets/Bookmark/BookmarkWidget.xml"
+                url="widgets/Bookmark/BookmarkWidget.swf"/>
+        <widget label="打印" left="60" top="400"
+                icon="assets/images/i_print.png"
+                config="widgets/Print/PrintWidget.xml"
+                url="widgets/Print/PrintWidget.swf"/>
+        <widget label="标绘" left="100" top="50" 
+    			icon="assets/images/i_draw2.png"
+    			config="widgets/DrawAdvanced/DrawWidget.xml"
+    			url="widgets/DrawAdvanced/DrawWidget.swf"/>
+		<widget label="导出图片" left="60" top="200"
+                icon="assets/images/i_exportmap.png"
+                config="widgets/ExportMap/exportMap.xml"
+                url="widgets/ExportMap/exportMap.swf"/>
+        <widget label="测量" left="60" top="100"
+                icon="assets/images/i_measure2.png"
+                config="widgets/Measure/MeasureWidget.xml"
+                url="widgets/Measure/MeasureWidget.swf"/>
+        <widget label="定位" left="60" top="100"
+                icon="assets/images/i_locate.png"
+                config="widgets/Locate/LocateWidget.xml"
+                url="widgets/Locate/LocateWidget.swf"/>
+        <widget label="雾情查询" left="60" top="100"
+                icon="assets/images/i_fog.png"
+                config="widgets/FogInfo/FogInfoWidget.xml"
+                url="widgets/FogInfo/FogInfoWidget.swf"/>
+        <widget label="物标查询" left="60" top="100"
+                icon="assets/images/i_searchgraphical.png"
+                config="widgets/Search/SearchWidget.xml"
+                url="widgets/Search/SearchWidget.swf"/>
+        <widget label="可航水深" left="60" top="100"
+                icon="assets/images/i_widget.png"
+                config="widgets/SailDepth/SailDepthWidget.xml"
+                url="widgets/SailDepth/SailDepthWidget.swf"/>
+        <widget label="控制信号台" left="60" top="100"
+                icon="assets/images/i_station.png"
+                config="widgets/SignalStation/SignalStationWidget.xml"
+                url="widgets/SignalStation/SignalStationWidget.swf"/>
+        <widget label="水位站" left="60" top="100"
+                icon="assets/images/i_wlstation.png"
+                config="widgets/WaterlevelStation/WaterlevelStationWidget.xml"
+                url="widgets/WaterlevelStation/WaterlevelStationWidget.swf"/>
+    </widgetcontainer>
+    
+</configuration>

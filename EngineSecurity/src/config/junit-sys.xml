@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<suite name="权限框架测试集">
+	    <test alias="用户信息信息信息" class="com.flying.test.sys.TestSysUserinfo"/>
+  <test alias="角色管理" class="com.flying.test.sys.TestSysRole"/></suite>

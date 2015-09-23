@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sqlMapImport>
+	<sqlMap resource="sql/sys/mysql/T_SYS_RESOURCE.xml" />
+	<sqlMap resource="sql/sys/mysql/T_SYS_RESOURCETYPE.xml" />
+	<sqlMap resource="sql/sys/mysql/T_SYS_DEPARTMENT.xml" />
+	<sqlMap resource="sql/sys/mysql/T_SYS_USERINFO.xml" />
+	<sqlMap resource="sql/sys/mysql/T_SYS_ROLETYPE.xml" />
+	<sqlMap resource="sql/sys/mysql/T_SYS_ROLE.xml" />
+	<sqlMap resource="sql/sys/mysql/T_SYS_USERROLE.xml" />
+	<sqlMap resource="sql/sys/mysql/T_SYS_RESOURCEROLE.xml" />
+	<sqlMap resource="sql/sys/mysql/T_SYS_REMIND.xml" />
+	<sqlMap resource="sql/sys/mysql/T_SYS_MESSAGE.xml" />
+	<sqlMap resource="sql/sys/mysql/T_SYS_PERSON.xml" />
+	<sqlMap resource="sql/sys/mysql/T_SYS_USERRESOURCE.xml" />
+	<sqlMap resource="sql/sys/mysql/T_SYS_GROUP.xml" />
+	<sqlMap resource="sql/sys/mysql/T_SYS_GROUP_USER.xml" />
+</sqlMapImport>

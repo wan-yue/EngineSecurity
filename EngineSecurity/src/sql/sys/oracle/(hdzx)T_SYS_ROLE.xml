@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="T_SYS_ROLE">
+    <!--角色信息配置文件开始-->
+    <!--别名-->
+    <typeAlias alias="hashmap" type="java.util.HashMap" />
+
+    <!-- 查询【角色信息】所有数据-->
+    <select id="selectAll"  parameterClass="hashmap" resultClass="hashmap">
+    	SELECT * FROM(
+			SELECT ROWNUM ROW_NUM,B.* FROM(
+			       SELECT A.ROLE_ID,A.ROLE_TYPE_ID,B.ROLE_TYPE_NAME,A.ROLE_NAME,A.PID,A.ROLE_DESC,A.BE_USE,A.ROLE_CODE,A.STATE FROM T_SYS_ROLE A 
+    			   LEFT JOIN T_SYS_ROLETYPE B ON A.ROLE_TYPE_ID = B.ROLE_TYPE_ID
+			       <isNotEmpty prepend="" property="order">
+	    				$order$
+	    		   </isNotEmpty>
+	    		   <isEmpty prepend="" property="order">
+	    		   		ORDER BY ROLE_ID  DESC
+	    		   </isEmpty>
+			) B   	
+			<isNotEmpty prepend="WHERE" property="filter">
+	    		($filter$)
+	    	</isNotEmpty>
+    	) 
+    	<isNotEmpty prepend="WHERE" property="start">
+    		ROW_NUM BETWEEN  (#start#+1) and (#start#+#limit#)
+    	</isNotEmpty>
+    </select>
+    <select id="selectAllTotal" parameterClass="hashmap" resultClass="int">
+    	SELECT COUNT(1) FROM (
+    		SELECT ROWNUM ROW_NUM,B.* FROM(
+			       SELECT A.ROLE_ID,A.ROLE_TYPE_ID,B.ROLE_TYPE_NAME,A.ROLE_NAME,A.PID,A.ROLE_DESC,A.BE_USE,A.ROLE_CODE,A.STATE FROM T_SYS_ROLE A 
+    			   LEFT JOIN T_SYS_ROLETYPE B ON A.ROLE_TYPE_ID = B.ROLE_TYPE_ID
+			) B   	
+			<isNotEmpty prepend="WHERE" property="filter">
+	    		($filter$)
+	    	</isNotEmpty>
+    	) C
+    </select>
+    <!--根据ID删除【角色信息】-->
+    <select id="selectById" resultClass="hashmap">
+    	SELECT A.ROLE_ID,A.ROLE_TYPE_ID,A.ROLE_NAME,A.PID,A.ROLE_DESC,A.BE_USE,A.ROLE_CODE,A.STATE FROM T_SYS_ROLE A WHERE A.ROLE_ID = #ROLE_ID#
+    </select>
+    <!--添加【角色信息】-->
+	<insert id="insert" parameterClass="hashmap">
+		<selectKey  resultClass ="string"  keyProperty ="ROLE_ID" >   <![CDATA[ SELECT SYS_GUID() AS ROLE_ID FROM DUAL ]]>     </selectKey >
+		INSERT INTO T_SYS_ROLE(ROLE_ID,ROLE_TYPE_ID,ROLE_NAME,PID,ROLE_DESC,BE_USE,ROLE_CODE,STATE) 
+		VALUES (#ROLE_ID:VARCHAR#,#ROLE_TYPE_ID:VARCHAR#,#ROLE_NAME:VARCHAR#,0,#ROLE_DESC:VARCHAR#,1,#ROLE_CODE:VARCHAR#,2)
+    </insert>
+    <!--根据ID删除【角色信息】-->
+    <delete id="delete" parameterClass="hashmap">
+		DELETE FROM T_SYS_ROLE WHERE ROLE_ID = #ROLE_ID#
+	</delete>
+    <!--修改【角色信息】-->
+	<update id="update" parameterClass="hashmap">
+		UPDATE  T_SYS_ROLE SET ROLE_TYPE_ID = #ROLE_TYPE_ID:VARCHAR#,ROLE_NAME = #ROLE_NAME:VARCHAR#,PID = #PID:VARCHAR#,ROLE_DESC = #ROLE_DESC:VARCHAR#,BE_USE = #BE_USE:INTEGER#,ROLE_CODE = #ROLE_CODE:VARCHAR#,STATE = #STATE:INTEGER#
+		WHERE  ROLE_ID = #ROLE_ID#
+	</update> 
+	<!-- 查询人员所有角色 -->
+    <select id="getAllRolesByUserId" parameterClass="param" resultClass="result">
+    	<![CDATA[
+	        SELECT T3.*
+	  		FROM T_SYS_USERINFO T1,T_SYS_USERROLE T2,T_SYS_ROLE T3 
+	  		WHERE T1.USER_ID=T2.USER_ID AND T2.ROLE_ID=T3.ROLE_ID 
+	  		AND T1.USER_ID=#USER_ID#
+        ]]>
+    </select>
+    <!-- 得到除去用户拥有的所有角色-->
+    <select id="getRoleOutOfUserId" parameterClass="param" resultClass="result">
+    	SELECT * FROM T_SYS_ROLE  WHERE ROLE_ID NOT IN(
+			SELECT T3.ROLE_ID
+  		FROM T_SYS_USERINFO T1,T_SYS_USERROLE T2,T_SYS_ROLE T3 
+  		WHERE T1.USER_ID=T2.USER_ID AND T2.ROLE_ID=T3.ROLE_ID 
+  		AND T1.USER_ID=#USER_ID#)
+    </select>
+    <!-- 查询工作流【角色信息】-->
+    <select id="selectWfRole" parameterClass="param" resultClass="result">
+    	SELECT A.ROLE_ID,A.ROLE_TYPE_ID,A.ROLE_NAME,A.PID,A.ROLE_DESC,A.BE_USE,A.ROLE_CODE,A.STATE FROM T_SYS_ROLE A 
+    </select>
+     <!-- 询某人的工作流角色-->
+    <select id="selectWfRoleByUserId" parameterClass="param" resultClass="result">
+    	SELECT A.ROLE_ID,A.ROLE_TYPE_ID,A.ROLE_NAME,A.PID,A.ROLE_DESC,A.BE_USE,A.ROLE_CODE,A.STATE FROM T_SYS_ROLE A 
+      	LEFT JOIN T_SYS_USERROLE B ON A.ROLE_ID = B.ROLE_ID 
+		WHERE A.ROLE_ID IN 
+		(
+			SELECT DISTINCT ROLE_ID FROM T_WF_STEPROLE T1 
+			LEFT JOIN T_WF_STEP T2 ON T1.STEP_ID = T2.STEP_ID 
+			LEFT JOIN T_WF_FLOW T3 ON T2.FLOW_ID = T3.FLOW_ID
+			WHERE T3.STATE = 1
+		)
+    	<isNotEmpty prepend="AND" property="USER_ID">
+    		B.USER_ID = #USER_ID#
+    	</isNotEmpty>
+    </select>
+</sqlMap>

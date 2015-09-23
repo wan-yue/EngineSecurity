@@ -1,0 +1,18 @@
+<?xml version="1.0" ?>
+<configuration>
+    <layerlist visible="true">
+        <!-- <excludelayer>The Label Of Some Layer In Main Config File</excludelayer> -->
+        <excludelayer remark="MeasureWidget">Draw Features</excludelayer>
+        <excludelayer remark="MeasureWidget">Draw Measurement Features</excludelayer>
+        <excludelayer remark="LocateWidget">locate</excludelayer>
+        <excludelayer remark="SailDepthWidget">sailwidth_layer</excludelayer>
+        <excludelayer remark="FogInfoWidget">foginfo_lyr</excludelayer>
+    </layerlist>
+    <includeLegendItems>true</includeLegendItems>
+    <expandlayeritems>false</expandlayeritems>
+</configuration>
+
+<!--
+    See Map Switcher widget tag reference at
+    http://links.esri.com/mapswitcherwidget
+-->

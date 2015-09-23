@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="T_SYS_USERROLE">
+	<!--用户角色信息配置文件开始 -->
+	<!--别名 -->
+	<typeAlias alias="hashmap" type="java.util.HashMap" />
+
+	<!-- 查询【用户角色信息】所有数据 -->
+	<select id="selectAll" parameterClass="hashmap" resultClass="hashmap">
+		SELECT A.USER_ROLE_ID,A.USER_ID,B.USER_NAME,A.ROLE_ID,C.ROLE_NAME FROM
+		T_SYS_USERROLE A
+		LEFT JOIN T_SYS_USERINFO B ON A.USER_ID = B.USER_ID
+		LEFT JOIN T_SYS_ROLE C ON A.ROLE_ID = C.ROLE_ID
+		<isNotEmpty prepend="" property="order">
+			$order$
+		</isNotEmpty>
+		<isEmpty prepend="" property="order">
+			ORDER BY USER_ROLE_ID DESC
+		</isEmpty>
+		<isNotEmpty prepend="WHERE" property="filter">
+			$filter$
+		</isNotEmpty>
+		<isNotEmpty prepend="" property="start">
+			LIMIT #start#,#limit#
+		</isNotEmpty>
+	</select>
+	<select id="selectAllTotal" parameterClass="hashmap"
+		resultClass="int">
+		SELECT COUNT(1) FROM (
+		SELECT ROWNUM ROW_NUM,B.* FROM(
+		SELECT A.USER_ROLE_ID,A.USER_ID,B.USER_NAME,A.ROLE_ID,C.ROLE_NAME FROM
+		T_SYS_USERROLE A
+		LEFT JOIN T_SYS_USERINFO B ON A.USER_ID = B.USER_ID
+		LEFT JOIN T_SYS_ROLE C ON A.ROLE_ID = C.ROLE_ID
+		) B
+		<isNotEmpty prepend="WHERE" property="filter">
+			($filter$)
+		</isNotEmpty>
+		) C
+	</select>
+	<!--根据ID删除【用户角色信息】 -->
+	<select id="selectById" resultClass="hashmap">
+		SELECT A.USER_ROLE_ID,A.USER_ID,A.ROLE_ID FROM T_SYS_USERROLE A WHERE
+		A.USER_ROLE_ID = #USER_ROLE_ID#
+	</select>
+	<!--添加【用户角色信息】 -->
+	<insert id="insert" parameterClass="hashmap">
+		<selectKey resultClass="string" keyProperty="USER_ROLE_ID">   <![CDATA[ SELECT UPPER(REPLACE(UUID(),'-','')) AS USER_ROLE_ID ]]>
+		</selectKey>
+		INSERT INTO T_SYS_USERROLE(USER_ROLE_ID,USER_ID,ROLE_ID)
+		VALUES (#USER_ROLE_ID:VARCHAR#,#USER_ID:VARCHAR#,#ROLE_ID:VARCHAR#)
+	</insert>
+	<!--删除 -->
+	<delete id="delete" parameterClass="hashmap">
+		DELETE FROM T_SYS_USERROLE
+		<dynamic prepend="WHERE">
+			<isNotEmpty property="USER_ROLE_ID" prepend="AND">
+				USER_ROLE_ID = #USER_ROLE_ID#
+			</isNotEmpty>
+			<isNotEmpty property="USER_ID" prepend="AND">
+				USER_ID = #USER_ID#
+			</isNotEmpty>
+			<isNotEmpty property="ROLE_ID" prepend="AND">
+				ROLE_ID = #ROLE_ID#
+			</isNotEmpty>
+		</dynamic>
+	</delete>
+	<!--修改【用户角色信息】 -->
+	<update id="update" parameterClass="hashmap">
+		UPDATE T_SYS_USERROLE SET
+		USER_ID = #USER_ID:VARCHAR#,ROLE_ID = #ROLE_ID:VARCHAR#
+		WHERE
+		USER_ROLE_ID = #USER_ROLE_ID#
+	</update>
+	<!--根据外键ID查询【用户角色信息】 -->
+	<select id="selectByFk" parameterClass="hashmap" resultClass="hashmap">
+		SELECT A.USER_ROLE_ID,A.USER_ID,B.USER_NAME,A.ROLE_ID FROM
+		T_SYS_USERROLE A
+		LEFT JOIN T_SYS_USERINFO B ON A.USER_ID = B.USER_ID
+		<dynamic prepend="WHERE">
+			<isNotEmpty property="USER_ID" prepend="AND">
+				A.USER_ID = #USER_ID#
+			</isNotEmpty>
+			<isNotEmpty property="ROLE_ID" prepend="AND">
+				A.ROLE_ID = #ROLE_ID#
+			</isNotEmpty>
+		</dynamic>
+	</select>
+</sqlMap>

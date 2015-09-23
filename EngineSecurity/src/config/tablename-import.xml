@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tablenames author="zdf">
+  <import resource="config/tablename-core.xml"/>
+  <import resource="config/tablename-sys.xml"/>
+</tablenames>

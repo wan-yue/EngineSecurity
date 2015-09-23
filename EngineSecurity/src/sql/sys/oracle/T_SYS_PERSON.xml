@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="T_SYS_PERSON">
+    <!--人员信息配置文件开始-->
+    <!--别名-->
+    <typeAlias alias="hashmap" type="java.util.HashMap" />
+
+    <!-- 查询【人员信息】所有数据-->
+    <select id="selectAll"  parameterClass="hashmap" resultClass="hashmap">
+    	SELECT * FROM(
+			SELECT ROWNUM ROW_NUM,B.* FROM(
+			       SELECT A.PERSON_ID,A.PERSON_NAME,A.IDCARD,A.PEROSN_PIC,TO_CHAR(A.POST_DATE,'YYYY-MM-DD') POST_DATE,    
+   		  			T2.DEPARTMENT_NAME,A.DEPARTMENT_ID,   A.SEX,TO_CHAR(A.BIRTHDAY,'YYYY-MM-DD') BIRTHDAY,A.EMAIL,A.PHONE,A.QQ     
+    	  			FROM T_SYS_PERSON A LEFT JOIN T_SYS_DEPARTMENT T2 ON A.DEPARTMENT_ID=T2.DEPARTMENT_ID 
+			       <isNotEmpty prepend="" property="order">
+	    				$order$
+	    		   </isNotEmpty>
+	    		   <isEmpty prepend="" property="order">
+	    		   		ORDER BY PERSON_ID  DESC
+	    		   </isEmpty>
+			) B   	
+			<isNotEmpty prepend="WHERE" property="filter">
+	    		($filter$)
+	    	</isNotEmpty>
+    	) 
+    	<isNotEmpty prepend="WHERE" property="start">
+    		ROW_NUM BETWEEN  (#start#+1) and (#start#+#limit#)
+    	</isNotEmpty>
+    </select>
+    <select id="selectAllTotal" parameterClass="hashmap" resultClass="int">
+    	SELECT COUNT(1) FROM (
+    		SELECT A.PERSON_NAME,A.IDCARD,A.PEROSN_PIC,TO_CHAR(A.POST_DATE,'YYYY-MM-DD') POST_DATE,A.DEPARTMENT_ID,A.SEX,TO_CHAR(A.BIRTHDAY,'YYYY-MM-DD') BIRTHDAY,A.EMAIL,A.PHONE,A.QQ,A.PERSON_ID FROM T_SYS_PERSON A 
+    		<isNotEmpty prepend="WHERE" property="filter">
+    		    	($filter$)
+    		</isNotEmpty>
+    	) B
+    </select>
+    <select id="getPinyin" resultClass="String">
+    	SELECT getPinyin(#PERSON_NAME#,1) as pinyinName FROM DUAL
+    </select>
+    <!--根据ID删除【人员信息】-->
+    <select id="selectById" resultClass="hashmap">
+    	SELECT A.PERSON_NAME,A.IDCARD,A.PEROSN_PIC,TO_CHAR(A.POST_DATE,'YYYY-MM-DD') POST_DATE,A.DEPARTMENT_ID,A.SEX,TO_CHAR(A.BIRTHDAY,'YYYY-MM-DD') BIRTHDAY,A.EMAIL,A.PHONE,A.QQ,A.PERSON_ID FROM T_SYS_PERSON A WHERE A.PERSON_ID = #PERSON_ID#
+    </select>
+    <!--添加【人员信息】-->
+	<insert id="insert" parameterClass="hashmap">
+		<selectKey  resultClass ="string"  keyProperty ="PERSON_ID" >   <![CDATA[ SELECT SYS_GUID() AS PERSON_ID FROM DUAL ]]>     </selectKey >
+		INSERT INTO T_SYS_PERSON(PERSON_ID,PERSON_NAME,IDCARD,PEROSN_PIC,POST_DATE,DEPARTMENT_ID,SEX,BIRTHDAY,EMAIL,PHONE,QQ) 
+		VALUES (#PERSON_ID:VARCHAR#,#PERSON_NAME:VARCHAR#,#IDCARD:VARCHAR#,#PEROSN_PIC:VARCHAR#,#POST_DATE:DATE#,#DEPARTMENT_ID:VARCHAR#,#SEX:VARCHAR#,#BIRTHDAY:DATE#,#EMAIL:VARCHAR#,#PHONE:VARCHAR#,#QQ:VARCHAR#)
+    </insert>
+    <!--根据ID删除【人员信息】-->
+    <delete id="delete" parameterClass="hashmap">
+		DELETE FROM T_SYS_PERSON WHERE PERSON_ID = #PERSON_ID#
+	</delete>
+    <!--修改【人员信息】-->
+	<update id="update" parameterClass="hashmap">
+		UPDATE  T_SYS_PERSON SET PERSON_NAME = #PERSON_NAME:VARCHAR#,IDCARD = #IDCARD:VARCHAR#,PEROSN_PIC = #PEROSN_PIC:VARCHAR#,POST_DATE = #POST_DATE:DATE#,DEPARTMENT_ID = #DEPARTMENT_ID:INTEGER#,SEX = #SEX:VARCHAR#,BIRTHDAY = #BIRTHDAY:DATE#,EMAIL = #EMAIL:VARCHAR#,PHONE = #PHONE:VARCHAR#,QQ = #QQ:VARCHAR#
+		WHERE  PERSON_ID = #PERSON_ID#
+	</update> 
+</sqlMap>

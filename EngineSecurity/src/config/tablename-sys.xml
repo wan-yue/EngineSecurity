@@ -1,0 +1,356 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tablename>
+	<whiteList>
+		<login-whiteList-item name="T_SYS_RESOURCE.selectSecurityResource" />
+		<login-whiteList-item name="T_SYS_ROLE.selectWfRole" />
+		<login-whiteList-item name="T_SYS_USERRESOURCE.selectAll" />
+		<login-whiteList-item name="T_SYS_USERRESOURCE.selectSubMenu" />
+		<login-whiteList-item name="T_SYS_USERRESOURCE.updateByUserIdResourceId" />
+		<login-whiteList-item name="T_SYS_REMIND.selectAll" />
+		<login-whiteList-item name="T_SYS_REMIND.getUserRemind" />
+		<login-whiteList-item name="T_SYS_MESSAGE.getUserMessage" />
+		<login-whiteList-item name="T_SYS_MESSAGE.readMessage" />
+	</whiteList>
+	<item name="T_SYS_DEPARTMENT" alias="部门信息" load="true">
+		<op alias="添加【部门信息】  zjx" sqlid="T_SYS_DEPARTMENT.insert" type="insert">
+			<interceptor-ref name="insertInterceptor" />
+		</op>
+		<op alias="修改【部门信息】" sqlid="T_SYS_DEPARTMENT.update" type="update">
+			<interceptor-ref name="updateInterceptor" />
+		</op>
+		<op alias="根据ID删除【部门信息】" sqlid="T_SYS_DEPARTMENT.delete" type="delete" />
+		<op alias="查询【部门信息】所有数据" sqlid="T_SYS_DEPARTMENT.selectAll" type="map" />
+		<op alias="查询【部门信息】所有数据 ,构建树 " sqlid="T_SYS_DEPARTMENT.selectAllList"
+			type="list">
+			<interceptor
+				class="com.flying.Interceptor.sys.DepartmentGetTreeInterceptor" />
+		</op>
+		<op alias="按部门ID查询子部门 " sqlid="T_SYS_DEPARTMENT.selectByParentId"
+			type="list" />
+		<op alias="查询【部门信息】排序" sqlid="T_SYS_DEPARTMENT.sort" type="space">
+			<interceptor class="com.flying.Interceptor.sys.DepartmentSortInterceptor" />
+		</op>
+		<op alias="查询【部门信息】所有数据 ,为角色构建树 " sqlid="T_SYS_DEPARTMENT.selectAllListForRole"
+			type="space">
+			<interceptor
+				class="com.flying.Interceptor.sys.DepartmentGetTreeForRoleInterceptor" />
+		</op>
+	</item>
+	<item name="T_SYS_USERINFO" alias="用户信息" load="true">
+		<op alias="添加【用户信息】" sqlid="T_SYS_USERINFO.insert" type="insert">
+			<interceptor
+				class="com.flying.Interceptor.impl.BooleanParameterSwitchInterceptor" />
+			<interceptor
+				class="com.flying.Interceptor.impl.NullParameterSwitchInterceptor" />
+			<interceptor
+				class="com.flying.Interceptor.impl.DateParameterSwitchInterceptor" />
+			<interceptor class="com.flying.Interceptor.sys.UserinfoInsertInterceptor" />
+		</op>
+		<op alias="修改【用户信息】" sqlid="T_SYS_USERINFO.update" type="update">
+			<interceptor class="com.flying.Interceptor.sys.SyncUserInfoInterceptor" />
+			<interceptor class="com.flying.Interceptor.impl.UpdateInterceptor" />
+			<interceptor
+				class="com.flying.Interceptor.impl.BooleanParameterSwitchInterceptor" />
+			<interceptor
+				class="com.flying.Interceptor.impl.NullParameterSwitchInterceptor" />
+			<interceptor
+				class="com.flying.Interceptor.impl.DateParameterSwitchInterceptor" />
+			<interceptor class="com.flying.Interceptor.sys.UserinfoUpdateInterceptor" />
+		</op>
+		<op alias="根据ID删除【用户信息】" sqlid="T_SYS_USERINFO.delete" type="delete" />
+		<op alias="查询【用户信息】所有数据" sqlid="T_SYS_USERINFO.selectAll" type="map" />
+		<op alias="查询【用户信息】通过ID" sqlid="T_SYS_USERINFO.selectById" type="object" />
+		<op alias="查询角色所有的用户数据" sqlid="T_SYS_USERINFO.getAllUsersByRoleId"
+			type="list" />
+		<op alias="查询角色没有的用户数据" sqlid="T_SYS_USERINFO.getUserOutOfRoleId"
+			type="list" />
+		<op alias="根据账号，密码获取用户信息 (登录)" sqlid="T_SYS_USERINFO.login" type="object">
+			<interceptor class="com.flying.Interceptor.sys.LoginInterceptor" />
+		</op>
+		<op alias="按部门ID查询部门下所有人员" sqlid="T_SYS_USERINFO.selectByDepartmentId"
+			type="list" />
+		<op alias="获取登录用户的信息" sqlid="T_SYS_USERINFO.selectInfo" type="object">
+			<interceptor
+				class="com.flying.Interceptor.sys.GetAllByUserIdPropertyInterceptor" />
+			<interceptor class="com.flying.Interceptor.sys.GetGisMessageInterceptor" />
+		</op>
+		<op alias="验证登录名是否重复" sqlid="T_SYS_USERINFO.validateName" type="object" />
+		<op alias="验证登录名是否重复" sqlid="T_SYS_USERINFO.validateLoginName"
+			type="object" />
+		<op alias="初始化密码" sqlid="T_SYS_USERINFO.modifyPassword" type="space">
+			<interceptor class="com.flying.Interceptor.sys.ModifyPassInterceptor" />
+		</op>
+		<op alias="webservice根据账号，密码获取用户信息 (登录)" sqlid="T_SYS_USERINFO.wslogin"
+			type="object">
+			<interceptor class="com.flying.Interceptor.sys.WsLoginInterceptor" />
+		</op>
+		<op alias="退出系统" sqlid="T_SYS_USERINFO.logout" type="space">
+			<interceptor class="com.flying.Interceptor.sys.LogoutInterceptor" />
+		</op>
+	</item>
+	<item name="T_SYS_ROLETYPE" alias="角色类型信息" load="true">
+		<op alias="添加【角色类型信息】" sqlid="T_SYS_ROLETYPE.insert" type="insert">
+			<interceptor-ref name="insertInterceptor" />
+		</op>
+		<op alias="修改【角色类型信息】" sqlid="T_SYS_ROLETYPE.update" type="update">
+			<interceptor-ref name="updateInterceptor" />
+		</op>
+		<op alias="根据ID删除【角色类型信息】" sqlid="T_SYS_ROLETYPE.delete" type="delete" />
+		<op alias="查询【角色类型信息】所有数据" sqlid="T_SYS_ROLETYPE.selectAll" type="map" />
+		<op alias="查询【角色类型信息】通过ID查询" sqlid="T_SYS_ROLETYPE.selectById"
+			type="object" />
+	</item>
+	<item name="T_SYS_ROLE" alias="角色信息" load="true">
+		<op alias="添加【角色信息】" sqlid="T_SYS_ROLE.insert" type="insert">
+			<interceptor-ref name="insertInterceptor" />
+		</op>
+		<op alias="修改【角色信息】" sqlid="T_SYS_ROLE.update" type="update">
+			<interceptor class="com.flying.Interceptor.impl.UpdateInterceptor" />
+			<interceptor
+				class="com.flying.Interceptor.impl.BooleanParameterSwitchInterceptor" />
+			<interceptor
+				class="com.flying.Interceptor.impl.NullParameterSwitchInterceptor" />
+			<interceptor
+				class="com.flying.Interceptor.impl.DateParameterSwitchInterceptor" />
+			<interceptor class="com.flying.Interceptor.sys.RoleUpdateInterceptor" />
+		</op>
+		<op alias="根据ID删除【角色信息】" sqlid="T_SYS_ROLE.delete" type="delete" />
+		<op alias="查询【角色信息】所有数据" sqlid="T_SYS_ROLE.selectAll" type="map" />
+		<op alias="查询【角色信息】通过ID查询" sqlid="T_SYS_ROLE.selectById" type="object" />
+		<op alias="查询用户所有的角色数据" sqlid="T_SYS_ROLE.getAllRolesByUserId"
+			type="list" />
+		<op alias="查询用户没有的角色数据" sqlid="T_SYS_ROLE.getRoleOutOfUserId" type="list" />
+		<op alias="查询工作流【角色信息】" sqlid="T_SYS_ROLE.selectWfRole" type="list" />
+		<op alias="查询某人的工作流角色" type="list" sqlid="T_SYS_ROLE.selectWfRoleByUserId">
+			<interceptor
+				class="com.flying.Interceptor.sys.GetAllByUserIdPropertyInterceptor" />
+		</op>
+		<op alias="根据部门ID查询【角色信息】" sqlid="T_SYS_ROLE.selectByDepartmentId"
+			type="list" />
+		<op alias="复制模板资源" sqlid="T_SYS_ROLE.copyResource" type="space">
+			<interceptor class="com.flying.Interceptor.sys.CopyResourceInterceptor" />
+		</op>
+	</item>
+	<item name="T_SYS_USERROLE" alias="用户角色信息" load="true">
+		<op alias="添加【用户角色信息】" sqlid="T_SYS_USERROLE.insert" type="insert">
+			<interceptor class="com.flying.Interceptor.sys.AddUserRoleMsgInterceptor" />
+			<interceptor-ref name="insertInterceptor" />
+		</op>
+		<op alias="修改【用户角色信息】" sqlid="T_SYS_USERROLE.update" type="update">
+			<interceptor-ref name="updateInterceptor" />
+		</op>
+		<op alias="根据ID删除【用户角色信息】" sqlid="T_SYS_USERROLE.delete" type="delete">
+			<interceptor
+				class="com.flying.Interceptor.sys.DeleteUserRoleMsgInterceptor" />
+		</op>
+		<op alias="查询【用户角色信息】所有数据" sqlid="T_SYS_USERROLE.selectAll" type="map" />
+		<op alias="查询【用户角色信息】通过ID查询" sqlid="T_SYS_USERROLE.selectById"
+			type="object" />
+		<op alias="给用户添加角色信息" sqlid="T_SYS_USERROLE.insertByUserId" type="space">
+			<interceptor
+				class="com.flying.Interceptor.sys.UserinfoAssignRoleInterceptor" />
+		</op>
+		<op alias="给角色添加用户信息" sqlid="T_SYS_USERROLE.insertByRoleId" type="space">
+			<interceptor
+				class="com.flying.Interceptor.sys.RoleAssignUserinfoInterceptor" />
+		</op>
+		<op alias="根据外键ID查询【用户角色信息】" sqlid="T_SYS_USERROLE.selectByFk"
+			type="list" />
+	</item>
+	<item name="T_SYS_RESOURCE" alias="资源信息" load="true">
+		<op alias="添加【资源信息】" sqlid="T_SYS_RESOURCE.insert" type="insert">
+			<interceptor class="com.flying.Interceptor.sys.ResourceInsertInterceptor" />
+			<interceptor-ref name="insertInterceptor" />
+		</op>
+		<op alias="修改【资源信息】" sqlid="T_SYS_RESOURCE.update" type="update">
+			<interceptor class="com.flying.Interceptor.sys.ResourceUpdateInterceptor" />
+			<interceptor-ref name="updateInterceptor" />
+		</op>
+		<op alias="根据ID删除【资源信息】" sqlid="T_SYS_RESOURCE.delete" type="delete">
+			<interceptor
+				class="com.flying.Interceptor.sys.DeleteSubResourceByResourceIdInterceptor" />
+		</op>
+		<op alias="查询【资源信息】所有数据" sqlid="T_SYS_RESOURCE.selectAll" type="list" />
+		<op alias="查询【资源信息】通过ID查询" sqlid="T_SYS_RESOURCE.selectById" type="object" />
+		<op alias="根据ADDR查询【资源信息】" sqlid="T_SYS_RESOURCE.selectByAddr"
+			type="list" />
+		<op alias="根据ADDR删除【资源信息】" sqlid="T_SYS_RESOURCE.deleteByAddr"
+			type="delete">
+			<interceptor
+				class="com.flying.Interceptor.sys.DeleteSubResourceByAddrInterceptor" />
+		</op>
+		<op alias="根据编码删除【资源信息】" sqlid="T_SYS_RESOURCE.deleteByCode" type="delete" />
+		<op alias="查询【资源信息】所有数据" sqlid="T_SYS_RESOURCE.selectSecurityResource"
+			type="list">
+			<interceptor class="com.flying.Interceptor.sys.GetSecurityInterceptor" />
+		</op>
+		<op alias="查询【子资源信息】" sqlid="T_SYS_RESOURCE.getSubResourceByUserId"
+			type="object" />
+		<op alias="查询【最大编号】" sqlid="T_SYS_RESOURCE.selectMaxCode" type="object" />
+		<op alias="查询菜单资源" sqlid="T_SYS_RESOURCE.selectAllMenu" type="list">
+			<interceptor
+				class="com.flying.Interceptor.sys.GetAllByUserIdPropertyInterceptor" />
+		</op>
+		<op alias="查询子资源" sqlid="T_SYS_RESOURCE.selectByPId" type="list" />
+		<op alias="查询【资源信息】通过ROLE_ID查询" sqlid="T_SYS_RESOURCE.selectByRoleId"
+			type="list" />
+		<op alias="根据条件查询【资源信息】" sqlid="T_SYS_RESOURCE.selectSome" type="list" />
+		<op alias="查询仅仅菜单资源" sqlid="T_SYS_RESOURCE.selectAllOnlyMenu" type="map" />
+		<op alias="webservice查询资源" sqlid="T_SYS_RESOURCE.wsSelectAll" type="list" />
+		<op alias="webservice查询资源" sqlid="T_SYS_RESOURCE.sort" type="space">
+			<interceptor class="com.flying.Interceptor.sys.ResourceSortInterceptor" />
+		</op>
+		<op alias="获取GIS资源" sqlid="T_SYS_RESOURCE.getGisResrource" type="list" />
+	</item>
+	<item name="T_SYS_RESOURCEROLE" alias="资源角色信息" load="true">
+		<op alias="添加【资源角色信息】" sqlid="T_SYS_RESOURCEROLE.insert" type="insert">
+			<interceptor-ref name="insertInterceptor" />
+		</op>
+		<op alias="修改【资源角色信息】" sqlid="T_SYS_RESOURCEROLE.update" type="update">
+			<interceptor-ref name="updateInterceptor" />
+		</op>
+		<op alias="根据ID删除【资源角色信息】" sqlid="T_SYS_RESOURCEROLE.delete" type="delete" />
+		<op alias="查询【资源角色信息】所有数据" sqlid="T_SYS_RESOURCEROLE.selectAll"
+			type="map" />
+		<op alias="查询【资源角色信息】通过ID查询" sqlid="T_SYS_RESOURCEROLE.selectById"
+			type="object" />
+		<op alias="通过资源树进行资源角色分配" sqlid="T_SYS_RESOURCEROLE.insertByTree"
+			type="space">
+			<interceptor
+				class="com.flying.Interceptor.sys.ResourceRoleInsertByTreeInterceptor" />
+		</op>
+		<op alias="通过外键查询 【资源角色信息】" sqlid="T_SYS_RESOURCEROLE.selectByFk"
+			type="list" />
+	</item>
+	<item name="T_SYS_RESOURCETYPE" alias="资源类型信息" load="true">
+		<op alias="添加【资源类型信息】" sqlid="T_SYS_RESOURCETYPE.insert" type="insert">
+			<interceptor-ref name="insertInterceptor" />
+		</op>
+		<op alias="修改【资源类型信息】" sqlid="T_SYS_RESOURCETYPE.update" type="update">
+			<interceptor-ref name="updateInterceptor" />
+		</op>
+		<op alias="根据ID删除【资源类型信息】" sqlid="T_SYS_RESOURCETYPE.delete" type="delete" />
+		<op alias="查询【资源类型信息】所有数据" sqlid="T_SYS_RESOURCETYPE.selectAll"
+			type="map" />
+		<op alias="查询【资源类型信息】通过ID查询" sqlid="T_SYS_RESOURCETYPE.selectById"
+			type="object" />
+	</item>
+	<item name="T_SYS_REMIND" alias="提醒管理" load="true">
+		<op alias="添加【提醒管理】" sqlid="T_SYS_REMIND.insert" type="insert">
+			<interceptor-ref name="insertInterceptor" />
+		</op>
+		<op alias="修改【提醒管理】" sqlid="T_SYS_REMIND.update" type="update">
+			<interceptor-ref name="updateInterceptor" />
+		</op>
+		<op alias="根据ID删除【提醒管理】" sqlid="T_SYS_REMIND.delete" type="delete" />
+		<op alias="查询【提醒管理】所有数据" sqlid="T_SYS_REMIND.selectAll" type="map">
+			<interceptor class="com.flying.Interceptor.sys.GetAllByUserIdInterceptor" />
+		</op>
+		<op alias="查询【提醒管理】通过ID查询" sqlid="T_SYS_REMIND.selectById" type="object" />
+		<op alias="查询【提醒管理】通过用户ID，地址" sqlid="T_SYS_REMIND.selectByUserIdAndAddr"
+			type="object" />
+		<op alias="查询【提醒】数量" sqlid="T_SYS_REMIND.getUserRemind" type="object">
+			<interceptor class="com.flying.Interceptor.sys.GetUserMessageInterceptor" />
+		</op>
+	</item>
+	<item name="T_SYS_MESSAGE" alias="消息表管理" load="true">
+		<op alias="添加【消息表管理】" sqlid="T_SYS_MESSAGE.insert" type="insert">
+			<interceptor-ref name="insertInterceptor" />
+		</op>
+		<op alias="修改【消息表管理】" sqlid="T_SYS_MESSAGE.update" type="update">
+			<interceptor-ref name="updateInterceptor" />
+		</op>
+		<op alias="根据ID删除【消息表管理】" sqlid="T_SYS_MESSAGE.delete" type="delete" />
+		<op alias="查询【消息表管理】所有数据" sqlid="T_SYS_MESSAGE.selectAll" type="map">
+			<interceptor class="com.flying.Interceptor.sys.GetUserMessageInterceptor" />
+		</op>
+		<op alias="查询【消息表管理】通过ID查询" sqlid="T_SYS_MESSAGE.selectById" type="object" />
+		<op alias="获取用户未读消息" sqlid="T_SYS_MESSAGE.getUserMessage" type="map">
+			<interceptor class="com.flying.Interceptor.sys.GetUserMessageInterceptor" />
+		</op>
+		<op alias="读取消息" sqlid="T_SYS_MESSAGE.deleteMessage" type="update" />
+		<op alias="读取一个角色多人发送的相同消息" sqlid="T_SYS_MESSAGE.readSameMessage"
+			type="update" />
+	</item>
+	<item name="T_SYS_PERSON" alias="人员信息" load="true">
+		<op alias="添加【人员信息】" sqlid="T_SYS_PERSON.insert" type="insert">
+			<interceptor class="com.flying.Interceptor.sys.PersonInsertInterceptor" />
+			<interceptor-ref name="insertInterceptor" />
+		</op>
+		<op alias="修改【人员信息】" sqlid="T_SYS_PERSON.update" type="update">
+			<interceptor class="com.flying.Interceptor.sys.PersonUpdateInterceptor" />
+			<interceptor-ref name="updateInterceptor" />
+		</op>
+		<op alias="根据ID删除【人员信息】" sqlid="T_SYS_PERSON.delete" type="delete">
+			<interceptor class="com.flying.Interceptor.sys.PersonDeleteInterceptor" />
+		</op>
+		<op alias="查询【人员信息】所有数据" sqlid="T_SYS_PERSON.selectAll" type="map" />
+		<op alias="查询【人员信息】通过ID查询" sqlid="T_SYS_PERSON.selectById" type="object" />
+		<op alias="得到汉字拼音" type="object" sqlid="T_SYS_PERSON.getPinyin" />
+	</item>
+	<item name="T_SYS_USERRESOURCE" alias="用户资源表" load="true">
+		<op alias="添加【用户资源表】" sqlid="T_SYS_USERRESOURCE.insert" type="insert">
+			<interceptor-ref name="insertInterceptor" />
+		</op>
+		<op alias="修改【用户资源表】" sqlid="T_SYS_USERRESOURCE.update" type="update">
+			<interceptor-ref name="updateInterceptor" />
+		</op>
+		<op alias="根据ID删除【用户资源表】" sqlid="T_SYS_USERRESOURCE.delete" type="delete" />
+		<op alias="查询【用户资源表】所有数据" sqlid="T_SYS_USERRESOURCE.selectAll"
+			type="list">
+			<interceptor class="com.flying.Interceptor.sys.GetAllMenuInterceptor" />
+		</op>
+		<op alias="查询【用户资源表】通过ID查询" sqlid="T_SYS_USERRESOURCE.selectById"
+			type="object" />
+		<op alias="个性化，修改【用户资源表】" sqlid="T_SYS_USERRESOURCE.updateByUserIdResourceId"
+			type="update">
+			<interceptor
+				class="com.flying.Interceptor.sys.UserResourceUpdateInterceptor" />
+			<interceptor
+				class="com.flying.Interceptor.impl.BooleanParameterSwitchInterceptor" />
+			<interceptor
+				class="com.flying.Interceptor.impl.NullParameterSwitchInterceptor" />
+			<interceptor
+				class="com.flying.Interceptor.impl.DateParameterSwitchInterceptor" />
+		</op>
+		<op alias="通过外键ID查询【用户资源表】" sqlid="T_SYS_USERRESOURCE.selectByFk"
+			type="list" />
+		<op alias="查询子菜单" sqlid="T_SYS_USERRESOURCE.selectSubMenu" type="list">
+			<interceptor class="com.flying.Interceptor.sys.SelectSubMenuInterceptor" />
+			<interceptor class="com.flying.Interceptor.sys.GetAllByUserIdInterceptor" />
+		</op>
+		<op alias="根据资源ID修改【用户资源表】" sqlid="T_SYS_USERRESOURCE.updateByResourceId"
+			type="update" />
+		<op alias="通过用户ID查询【用户资源表】" sqlid="T_SYS_USERRESOURCE.selectResourceByUserIdByGroup"
+			type="list" />
+	</item>
+	<item name="T_SYS_GROUP" alias="私有组管理" load="true">
+		<op alias="添加【私有组管理】" sqlid="T_SYS_GROUP.insert" type="insert">
+			<interceptor-ref name="insertInterceptor" />
+		</op>
+		<op alias="修改【私有组管理】" sqlid="T_SYS_GROUP.update" type="update">
+			<interceptor-ref name="updateInterceptor" />
+		</op>
+		<op alias="根据ID删除【私有组管理】" sqlid="T_SYS_GROUP.delete" type="delete" />
+		<op alias="查询【私有组管理】所有数据" sqlid="T_SYS_GROUP.selectAll" type="map" />
+		<op alias="查询【私有组管理】通过ID查询" sqlid="T_SYS_GROUP.selectById" type="object" />
+		<op alias="查询【私有组管理】通过PID查询" sqlid="T_SYS_GROUP.selectByPid" type="list" />
+	</item>
+	<item name="T_SYS_GROUP_USER" alias="私有组人员关系表" load="true">
+		<op alias="添加【私有组人员关系表】" sqlid="T_SYS_GROUP_USER.insert" type="insert">
+			<interceptor class="com.flying.Interceptor.sys.GroupUserInsertInterceptor" />
+		</op>
+		<op alias="修改【私有组人员关系表】" sqlid="T_SYS_GROUP_USER.update" type="update">
+			<interceptor-ref name="updateInterceptor" />
+		</op>
+		<op alias="根据ID删除【私有组人员关系表】" sqlid="T_SYS_GROUP_USER.delete" type="delete" />
+		<op alias="查询【私有组人员关系表】所有数据" sqlid="T_SYS_GROUP_USER.selectAll"
+			type="map" />
+		<op alias="查询【私有组人员关系表】通过ID查询" sqlid="T_SYS_GROUP_USER.selectById"
+			type="object" />
+		<op alias="通过外键查询 【私有组人员关系表】" sqlid="T_SYS_GROUP_USER.selectByFk"
+			type="list" />
+		<op alias="根据GROUP_ID删除【私有组人员关系表】" sqlid="T_SYS_GROUP_USER.deleteByGroupId"
+			type="delete" />
+	</item>
+</tablename>

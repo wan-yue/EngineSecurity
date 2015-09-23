@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="T_SYS_RESOURCE">
+	<!--ibatic注册 sql-map-config.xml 的注册字符串： <sqlMap resource="com/flying/dao/xml/T_SYS_RESOURCE.xml" 
+		/> -->
+	<!--数据库注册 注册到数据库 ： INSERT INTO T_BASE_CONFIG(CDMC,YWMC,ZXSQLID) VALUE('资源信息','T_SYS_RESOURCE','T_SYS_RESOURCE.selectAll'); -->
+	<!--资源信息配置文件开始 -->
+	<!--别名 -->
+	<typeAlias alias="result" type="java.util.HashMap" />
+	<typeAlias alias="param" type="java.util.HashMap" />
+
+	<!-- 查询 -->
+	<select id="selectAll" parameterClass="param" resultClass="result">
+		SELECT
+		A.RESOURCE_ID,A.RESOURCE_CODE,A.RESOURCE_TYPE_ID,A.RESOURCE_NAME,A.RESOURCE_ADDR,A.RESOURCE_HELPINFO,A.SECURITY_NAME,A.PID,A.CACHE,A.FACETYPE
+		FROM T_SYS_RESOURCE A
+		<isNotEmpty prepend="WHERE" property="filter">
+			$filter$
+		</isNotEmpty>
+		<isNotEmpty prepend="" property="order">
+			$order$
+		</isNotEmpty>
+		<isEmpty prepend="" property="order">
+			ORDER BY RESOURCE_ID DESC
+		</isEmpty>
+		<isNotEmpty prepend="" property="start">
+			LIMIT #start#,#limit#
+		</isNotEmpty>
+	</select>
+	<select id="selectAllTotal" parameterClass="param" resultClass="int">
+		SELECT COUNT(1) FROM T_SYS_RESOURCE A
+		<isNotEmpty prepend="WHERE" property="filter">
+			$filter$
+		</isNotEmpty>
+	</select>
+	<select id="selectById" resultClass="result">
+		SELECT
+		A.RESOURCE_ID,A.RESOURCE_CODE,A.RESOURCE_TYPE_ID,A.RESOURCE_NAME,A.RESOURCE_ADDR,A.RESOURCE_HELPINFO,A.SECURITY_NAME,A.PID,A.CACHE,A.FACETYPE,A.ICON
+		FROM T_SYS_RESOURCE A WHERE A.RESOURCE_ID = #RESOURCE_ID#
+	</select>
+	<!--插入 -->
+	<insert id="insert" parameterClass="param">
+		<selectKey resultClass="string" keyProperty="RESOURCE_ID">   <![CDATA[ SELECT UPPER(REPLACE(UUID(),'-','')) AS RESOURCE_ID ]]>
+		</selectKey>
+		INSERT INTO
+		T_SYS_RESOURCE(RESOURCE_ID,RESOURCE_CODE,RESOURCE_TYPE_ID,RESOURCE_NAME,RESOURCE_ADDR,RESOURCE_HELPINFO,SECURITY_NAME,PID,CACHE,FACETYPE,ICON)
+		VALUES
+		(#RESOURCE_ID:VARCHAR#,#RESOURCE_CODE:VARCHAR#,#RESOURCE_TYPE_ID:VARCHAR#,#RESOURCE_NAME:VARCHAR#,#RESOURCE_ADDR:VARCHAR#,#RESOURCE_HELPINFO:VARCHAR#,#SECURITY_NAME:VARCHAR#,#PID:VARCHAR#,#CACHE:INTEGER#,#FACETYPE:VARCHAR#,#ICON:VARCHAR#)
+	</insert>
+	<!--删除 -->
+	<delete id="delete" parameterClass="param">
+		DELETE FROM T_SYS_RESOURCE
+		WHERE RESOURCE_ID = #RESOURCE_ID#
+	</delete>
+	<!--根据ADDR查询【资源信息】 -->
+	<select id="selectByAddr" parameterClass="param" resultClass="result">
+		SELECT RESOURCE_CODE FROM T_SYS_RESOURCE WHERE RESOURCE_ADDR =
+		#RESOURCE_ADDR#
+	</select>
+	<!--根据ADDR删除【资源信息】 -->
+	<delete id="deleteByAddr" parameterClass="param">
+		DELETE FROM
+		T_SYS_RESOURCE WHERE RESOURCE_ADDR = #RESOURCE_ADDR#
+	</delete>
+	<!--根据编码删除【资源信息】 -->
+	<delete id="deleteByCode" parameterClass="param">
+		DELETE FROM
+		T_SYS_RESOURCE WHERE RESOURCE_CODE LIKE #RESOURCE_CODE#
+	</delete>
+	<!--更新 -->
+	<update id="update" parameterClass="param">
+		UPDATE T_SYS_RESOURCE SET
+		RESOURCE_CODE = #RESOURCE_CODE:VARCHAR#,RESOURCE_TYPE_ID =
+		#RESOURCE_TYPE_ID:VARCHAR#,RESOURCE_NAME =
+		#RESOURCE_NAME:VARCHAR#,RESOURCE_ADDR =
+		#RESOURCE_ADDR:VARCHAR#,RESOURCE_HELPINFO =
+		#RESOURCE_HELPINFO:VARCHAR#,SECURITY_NAME =
+		#SECURITY_NAME:VARCHAR#,PID =
+		#PID:VARCHAR#,CACHE=#CACHE:INTEGER#,FACETYPE=#FACETYPE:VARCHAR#,ICON=#ICON:VARCHAR#,SORT_NUM
+		= #SORT_NUM:INTEGER#
+		WHERE RESOURCE_ID = #RESOURCE_ID#
+	</update>
+	<!--获取权限资源 -->
+	<select id="selectSecurityResource" resultClass="result">
+		SELECT
+		T1.RESOURCE_ID,T1.RESOURCE_CODE,T1.RESOURCE_TYPE_ID,T1.RESOURCE_NAME,T1.RESOURCE_ADDR,T1.RESOURCE_HELPINFO,T1.SECURITY_NAME,T1.PID,T1.CACHE,T1.FACETYPE,T1.ICON
+		FROM T_SYS_RESOURCE T1
+		LEFT JOIN T_SYS_RESOURCEROLE T2 ON
+		T1.RESOURCE_ID = T2.RESOURCE_ID
+		LEFT JOIN T_SYS_USERROLE T3 ON T2.ROLE_ID = T3.ROLE_ID
+		WHERE T1.RESOURCE_TYPE_ID IN
+		('61505B4AD5A443CD8D230F95B21012BB','AEFA83E468A84650BCDF6A10464FEEA2')
+		<isNotEmpty prepend="AND" property="USER_ID">
+			T3.USER_ID = #USER_ID#
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="filter">
+			$filter$
+		</isNotEmpty>
+	</select>
+	<!--查询【子资源信息】 -->
+	<select id="getSubResourceByUserId" resultClass="int"
+		parameterClass="param">
+		SELECT COUNT(1) FROM T_SYS_RESOURCE T1
+		LEFT JOIN T_SYS_RESOURCE T2 ON T1.PID = T2.RESOURCE_ID
+		LEFT JOIN T_SYS_RESOURCEROLE T3 ON T2.RESOURCE_ID = T3.RESOURCE_ID
+		LEFT JOIN T_SYS_USERROLE T4 ON T3.ROLE_ID = T4.ROLE_ID
+		WHERE T1.RESOURCE_TYPE_ID = '8434A75F4FF1426CBA0368AFD05B3CAD' AND
+		T4.USER_ID = #USER_ID# AND T1.RESOURCE_ADDR = #RESOURCE_ADDR#
+	</select>
+	<!--查询【最大编号】 -->
+	<select id="selectMaxCode" resultClass="string" parameterClass="param">
+		SELECT MAX(RESOURCE_CODE) FROM T_SYS_RESOURCE WHERE RESOURCE_CODE LIKE
+		#RESOURCE_CODE#
+	</select>
+	<!--查询菜单资源 -->
+	<select id="selectAllMenu" resultClass="result" parameterClass="param">
+		SELECT
+		A.RESOURCE_ID,A.RESOURCE_CODE,A.RESOURCE_TYPE_ID,A.RESOURCE_NAME,A.RESOURCE_ADDR,A.RESOURCE_HELPINFO,A.SECURITY_NAME,A.PID,A.CACHE,A.FACETYPE,A.ICON,A.SORT_NUM
+		FROM T_SYS_RESOURCE A
+		WHERE (A.RESOURCE_TYPE_ID IN
+		('19AADE52436C4FA99BC3B9897E7B9408','61505B4AD5A443CD8D230F95B21012BB','AEFA83E468A84650BCDF6A10464FEEA2','CF6980A123B3439C8112F94C55ABF0AF')
+		OR A.RESOURCE_TYPE_ID IS NULL)
+		<isNotEmpty prepend="" property="USER_ID">
+			<isNotEqual prepend="AND" property="USER_ID"
+				compareValue="6B9A6FA513294FC9B9913FFDCA310F14">
+				RESOURCE_ID IN (SELECT DISTINCT RESOURCE_ID FROM T_SYS_USERRESOURCE WHERE
+				USER_ID = #USER_ID#)
+			</isNotEqual>
+		</isNotEmpty>
+		ORDER BY SORT_NUM
+	</select>
+	<!--查询子资源 -->
+	<select id="selectByPId" resultClass="result" parameterClass="param">
+		SELECT
+		A.RESOURCE_ID,A.RESOURCE_CODE,A.RESOURCE_TYPE_ID,A.RESOURCE_NAME,A.RESOURCE_ADDR,A.RESOURCE_HELPINFO,A.SECURITY_NAME,A.PID,A.CACHE,A.FACETYPE,A.ICON
+		FROM T_SYS_RESOURCE A
+		<dynamic prepend="WHERE">
+			<isNotEmpty prepend="AND" property="PID">
+				PID = #PID#
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="RESOURCE_TYPE_ID">
+				RESOURCE_TYPE_ID = #RESOURCE_TYPE_ID#
+			</isNotEmpty>
+		</dynamic>
+	</select>
+	<!--查询【资源信息】通过ROLE_ID查询 -->
+	<select id="selectByRoleId" resultClass="result" parameterClass="param">
+		SELECT T1.* FROM T_SYS_RESOURCE T1
+		LEFT JOIN T_SYS_RESOURCEROLE T2 ON T1.RESOURCE_ID = T2.RESOURCE_ID
+		WHERE T2.ROLE_ID = #ROLE_ID#
+	</select>
+	<!--根据条件查询【资源信息】 -->
+	<select id="selectSome" resultClass="result" parameterClass="param">
+		SELECT T1.* FROM T_SYS_RESOURCE T1
+		<dynamic prepend="WHERE">
+			<isNotEmpty prepend="AND" property="RESOURCE_ADDR">
+				RESOURCE_ADDR =
+				#RESOURCE_ADDR#
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="FACETYPE">
+				FACETYPE = #FACETYPE#
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="RESOURCE_CODE">
+				RESOURCE_CODE =
+				#RESOURCE_CODE#
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="RESOURCE_TYPE_ID">
+				RESOURCE_TYPE_ID IN
+				(#RESOURCE_TYPE_ID#)
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="SECURITY_NAME">
+				SECURITY_NAME =
+				#SECURITY_NAME#
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="PID">
+				PID = #PID#
+			</isNotEmpty>
+		</dynamic>
+	</select>
+	<!--查询仅仅菜单资源 -->
+	<select id="selectAllOnlyMenu" resultClass="result"
+		parameterClass="param">
+		SELECT * FROM(
+		SELECT ROWNUM ROW_NUM,B.* FROM(
+		SELECT
+		A.RESOURCE_ID,A.RESOURCE_CODE,A.RESOURCE_TYPE_ID,A.RESOURCE_NAME,A.RESOURCE_ADDR,A.RESOURCE_HELPINFO,A.SECURITY_NAME,A.PID,A.CACHE,A.FACETYPE,A.ICON
+		FROM T_SYS_RESOURCE A
+		WHERE A.RESOURCE_TYPE_ID = '19AADE52436C4FA99BC3B9897E7B9408'
+		ORDER BY SORT_NUM
+		) B
+		<isNotEmpty prepend="WHERE" property="filter">
+			$filter$
+		</isNotEmpty>
+		)
+		<isNotEmpty prepend="WHERE" property="start">
+			ROW_NUM BETWEEN (#start#+1) and (#start#+#limit#)
+		</isNotEmpty>
+
+	</select>
+	<select id="selectAllOnlyMenuTotal" resultClass="int"
+		parameterClass="param">
+		SELECT COUNT(*) FROM (
+		SELECT * FROM(
+		SELECT
+		A.RESOURCE_ID,A.RESOURCE_CODE,A.RESOURCE_TYPE_ID,A.RESOURCE_NAME,A.RESOURCE_ADDR,A.RESOURCE_HELPINFO,A.SECURITY_NAME,A.PID,A.CACHE,A.FACETYPE,A.ICON
+		FROM T_SYS_RESOURCE A
+		WHERE A.RESOURCE_TYPE_ID = '19AADE52436C4FA99BC3B9897E7B9408'
+		)
+		<isNotEmpty prepend="WHERE" property="filter">
+			$filter$
+		</isNotEmpty>
+		)
+	</select>
+	<!--webservice查询资源 -->
+	<select id="wsSelectAll" resultClass="result" parameterClass="param">
+		SELECT
+		A.RESOURCE_ID,A.RESOURCE_CODE,A.RESOURCE_TYPE_ID,A.RESOURCE_NAME,A.RESOURCE_ADDR,A.RESOURCE_HELPINFO,A.SECURITY_NAME,A.PID,A.CACHE,A.FACETYPE,A.ICON
+		FROM T_SYS_RESOURCE A
+		WHERE (A.RESOURCE_TYPE_ID IN
+		('19AADE52436C4FA99BC3B9897E7B9408','61505B4AD5A443CD8D230F95B21012BB','AEFA83E468A84650BCDF6A10464FEEA2')
+		OR A.RESOURCE_TYPE_ID IS NULL)
+		AND RESOURCE_ID IN (SELECT DISTINCT RESOURCE_ID FROM T_SYS_USERRESOURCE
+		WHERE USER_ID = #USER_ID#)
+	</select>
+	<!--更新排序 -->
+	<update id="updateSort" parameterClass="param">
+		UPDATE T_SYS_RESOURCE SET
+		SORT_NUM = #SORT_NUM:INTEGER#
+		WHERE RESOURCE_ID = #RESOURCE_ID#
+	</update>
+	<!--查询GIS资源 -->
+	<select id="getGisResrource" resultClass="result"
+		parameterClass="param">
+		SELECT DISTINCT
+		T2.RESOURCE_ID,T2.RESOURCE_NAME,T2.SECURITY_NAME FROM
+		T_SYS_USERRESOURCE T1
+		LEFT JOIN T_SYS_RESOURCE T2 ON T1.RESOURCE_ID = T2.RESOURCE_ID
+		WHERE T2.RESOURCE_TYPE_ID ='CF6980A123B3439C8112F94C55ABF0AF' AND
+		T1.USER_ID = #USER_ID#
+	</select>
+</sqlMap>

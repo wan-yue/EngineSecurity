@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<configuration>
+	<mapunits>esriMeters</mapunits>
+    <distanceunits>
+        <distanceunit abbr="英尺" conversion="3.2808" decimalplaces="0">英尺</distanceunit>
+        <distanceunit abbr="英里" conversion="0.000621" decimalplaces="2">英里</distanceunit>
+        <distanceunit abbr="米" conversion="1" decimalplaces="0">米</distanceunit>
+        <distanceunit abbr="千米" conversion=".001" decimalplaces="2">千米</distanceunit>
+        <distanceunit abbr="码" conversion="1.0936133" decimalplaces="0">码</distanceunit>
+    </distanceunits>
+    <areaunits>
+        <areaunit abbr="平方英里" conversion="0.0000003861021" decimalplaces="2">平方英里</areaunit>
+        <areaunit abbr="英亩" conversion="0.00024710538147" decimalplaces="2">英亩</areaunit>
+        <areaunit abbr="平方英尺" conversion="10.763910417" decimalplaces="0">平方英尺</areaunit>
+        <areaunit abbr="平方千米" conversion="0.000001" decimalplaces="2">平方千米</areaunit>
+        <areaunit abbr="公顷" conversion="0.0001" decimalplaces="2">公顷</areaunit>
+        <areaunit abbr="平方米" conversion="1" decimalplaces="0">平方米</areaunit>
+        <areaunit abbr="平方码" conversion="1.19599005" decimalplaces="0">平方码</areaunit>
+    </areaunits>
+	<labels>
+	    <!-- Widget menu labels -->
+		<clearlabel>清空测量结果</clearlabel>
+	</labels>
+</configuration>

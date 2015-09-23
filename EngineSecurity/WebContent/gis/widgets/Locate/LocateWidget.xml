@@ -1,0 +1,13 @@
+<?xml version="1.0" ?>
+<configuration>
+	<layername>locate</layername>
+	<labels>
+		<xexamplevalue>114.14</xexamplevalue>
+		<yexamplevalue>30.375</yexamplevalue>
+	</labels>
+	<mileageService>http://www.cjienc.com/agsrest/services/milage/MapServer/0</mileageService>
+	<transformObject>
+		<endpoint>http://localhost:9090/szhd/messagebroker/amf</endpoint>
+		<destination>coordinateTransform</destination>
+	</transformObject>
+</configuration>

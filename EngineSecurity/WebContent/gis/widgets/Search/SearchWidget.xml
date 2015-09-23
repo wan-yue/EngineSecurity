@@ -1,0 +1,15 @@
+<?xml version="1.0" ?>
+<configuration label="Louisville Parcels and Police">
+    <layers>
+        <layer>
+            <name>图幅框</name>
+            <url>http://www.cjienc.com/agsrest/services/frames/MapServer/0</url>
+            <fields all="false">
+                <field name="NAME"/>
+                <field name="CODE"/>
+                <field name="RIVERRANGE"/>
+            </fields>
+        </layer>
+    </layers>
+    <zoomscale>10000</zoomscale>
+</configuration>

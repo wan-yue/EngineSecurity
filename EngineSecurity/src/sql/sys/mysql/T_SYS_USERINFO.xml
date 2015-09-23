@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="T_SYS_USERINFO">
+	<!--用户信息配置文件开始 -->
+	<!--别名 -->
+	<typeAlias alias="hashmap" type="java.util.HashMap" />
+
+	<!-- 查询【用户信息】所有数据 -->
+	<select id="selectAll" parameterClass="hashmap" resultClass="hashmap">
+		SELECT
+		A.USER_ID,A.USER_NAME,A.LOGIN_NAME,A.PASSWORD,DATE_FORMAT(A.EXPIRED,"%Y-%m-%d")
+		EXPIRED,A.BE_USE,A.MODIFY_TIME,A.DEPARTMENT_ID,B.DEPARTMENT_NAME,A.STATE
+		FROM T_SYS_USERINFO A LEFT JOIN T_SYS_DEPARTMENT B ON A.DEPARTMENT_ID
+		= B.DEPARTMENT_ID
+		<isNotEmpty prepend="WHERE" property="filter">
+			($filter$)
+		</isNotEmpty>
+		<isNotEmpty prepend="" property="order">
+			$order$
+		</isNotEmpty>
+		<isEmpty prepend="" property="order">
+			ORDER BY USER_ID DESC
+		</isEmpty>
+		<isNotEmpty prepend="" property="start">
+			LIMIT #start#,#limit#
+		</isNotEmpty>
+	</select>
+	<select id="selectAllTotal" parameterClass="hashmap"
+		resultClass="int">
+		SELECT COUNT(1) FROM (
+		SELECT
+		A.USER_ID,A.USER_NAME,A.LOGIN_NAME,A.PASSWORD,DATE_FORMAT(A.EXPIRED,"%Y-%m-%d")
+		EXPIRED,A.BE_USE,DATE_FORMAT(A.MODIFY_TIME,"%Y-%m-%d")
+		MODIFY_TIME,A.STATE
+		FROM T_SYS_USERINFO A
+		) B
+		<isNotEmpty prepend="WHERE" property="filter">
+			($filter$)
+		</isNotEmpty>
+	</select>
+	<!--根据ID删除【用户信息】 -->
+	<select id="selectById" resultClass="hashmap">
+		SELECT
+		A.USER_ID,A.USER_NAME,A.LOGIN_NAME,A.PASSWORD,A.EXPIRED,A.BE_USE,A.MODIFY_TIME,A.DEPARTMENT_ID,A.STATE
+		FROM T_SYS_USERINFO A WHERE A.USER_ID = #USER_ID#
+	</select>
+	<!--添加【用户信息】 -->
+	<insert id="insert" parameterClass="hashmap">
+		<selectKey resultClass="string" keyProperty="USER_ID">   <![CDATA[ SELECT UPPER(REPLACE(UUID(),'-','')) AS USER_ID]]>
+		</selectKey>
+		INSERT INTO
+		T_SYS_USERINFO(USER_ID,USER_NAME,LOGIN_NAME,PASSWORD,EXPIRED,BE_USE,MODIFY_TIME,DEPARTMENT_ID,STATE)
+		VALUES
+		(#USER_ID:VARCHAR#,#USER_NAME:VARCHAR#,#LOGIN_NAME:VARCHAR#,#PASSWORD:VARCHAR#,#EXPIRED:DATE#,#BE_USE:INTEGER#,#MODIFY_TIME:DATE#,#DEPARTMENT_ID:VARCHAR#,#STATE:INTEGER#)
+	</insert>
+	<!--根据ID删除【用户信息】 -->
+	<delete id="delete" parameterClass="hashmap">
+		DELETE FROM T_SYS_USERINFO
+		WHERE USER_ID = #USER_ID#
+	</delete>
+	<!--修改【用户信息】 -->
+	<update id="update" parameterClass="hashmap">
+		UPDATE T_SYS_USERINFO SET
+		USER_NAME = #USER_NAME:VARCHAR#,LOGIN_NAME =
+		#LOGIN_NAME:VARCHAR#,PASSWORD = #PASSWORD:VARCHAR#,EXPIRED =
+		#EXPIRED:DATE#,BE_USE = #BE_USE:INTEGER#,MODIFY_TIME =
+		#MODIFY_TIME:DATE#,DEPARTMENT_ID = #DEPARTMENT_ID:VARCHAR#,STATE =
+		#STATE:INTEGER#
+		WHERE USER_ID = #USER_ID#
+	</update>
+	<!-- 查询此角色的所有用户 -->
+	<select id="getAllUsersByRoleId" parameterClass="hashmap"
+		resultClass="hashmap">
+    	<![CDATA[
+        	SELECT DISTINCT T1.USER_ID,CONCAT(T2.USER_NAME,'(',IFNULL(T5.DEPARTMENT_ID,'未分部门'),')') USER_NAME 
+	          FROM T_SYS_USERROLE T1
+	          LEFT JOIN T_SYS_USERINFO T2 ON T1.USER_ID=T2.USER_ID
+	          LEFT JOIN T_SYS_ROLE T3 ON T1.ROLE_ID=T3.ROLE_ID
+	          LEFT JOIN T_SYS_PERSON T4 ON T1.USER_ID = T4.PERSON_ID 
+	          LEFT JOIN T_SYS_DEPARTMENT T5 ON T4.DEPARTMENT_ID = T5.DEPARTMENT_ID 
+		      WHERE T1.ROLE_ID=#ROLE_ID#
+        ]]>
+	</select>
+	<!-- 得到此角色未分配的用户 -->
+	<select id="getUserOutOfRoleId" parameterClass="hashmap"
+		resultClass="hashmap">
+		SELECT DISTINCT A.USER_ID,CONCAT(A.USER_NAME,'(',IFNULL(C.DEPARTMENT_NAME,'未分部门'),')') USER_NAME FROM T_SYS_USERINFO A
+		LEFT JOIN T_SYS_PERSON B ON A.USER_ID = B.PERSON_ID
+		LEFT JOIN
+		T_SYS_DEPARTMENT C ON B.DEPARTMENT_ID = C.DEPARTMENT_ID
+		WHERE A.USER_ID
+		NOT IN(
+		SELECT T2.USER_ID
+		FROM T_SYS_USERROLE T1,T_SYS_USERINFO
+		T2,T_SYS_ROLE T3
+		WHERE T1.USER_ID=T2.USER_ID AND T1.ROLE_ID=T3.ROLE_ID
+		AND T1.ROLE_ID=#ROLE_ID#)
+		<isNotEmpty prepend="AND" property="USER_NAME">
+			A.USER_NAME LIKE
+			'%$USER_NAME$%'
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="DEPARTMENT_ID">
+			B.DEPARTMENT_ID = #DEPARTMENT_ID#
+		</isNotEmpty>
+	</select>
+	<!-- 根据姓名，密码获取用户信息 (登录) -->
+	<select id="login" parameterClass="hashmap" resultClass="hashmap">
+		SELECT
+		A.USER_ID,A.USER_NAME,A.LOGIN_NAME,A.PASSWORD,A.EXPIRED,A.BE_USE,A.MODIFY_TIME,A.STATE,B.PERSON_NAME,C.DEPARTMENT_ID,C.DEPARTMENT_NAME
+		FROM T_SYS_USERINFO A
+		LEFT JOIN T_SYS_PERSON B ON A.USER_ID =
+		B.PERSON_ID
+		LEFT JOIN T_SYS_DEPARTMENT C ON B.DEPARTMENT_ID =
+		C.DEPARTMENT_ID
+		WHERE A.LOGIN_NAME = #LOGIN_NAME# AND A.PASSWORD =
+		#PASSWORD#
+	</select>
+	<!-- 根据账号，密码获取用户信息 (登录) -->
+	<select id="loginByLoginName" parameterClass="hashmap"
+		resultClass="hashmap">
+		SELECT
+		A.USER_ID,A.USER_NAME,A.LOGIN_NAME,A.PASSWORD,A.EXPIRED,A.BE_USE,A.MODIFY_TIME,A.STATE,B.PERSON_NAME,C.DEPARTMENT_ID,C.DEPARTMENT_NAME
+		FROM T_SYS_USERINFO A
+		LEFT JOIN T_SYS_PERSON B ON A.USER_ID =
+		B.PERSON_ID
+		LEFT JOIN T_SYS_DEPARTMENT C ON B.DEPARTMENT_ID =
+		C.DEPARTMENT_ID
+		WHERE A.USER_NAME = #LOGIN_NAME# AND A.PASSWORD =
+		#PASSWORD#
+	</select>
+	<!-- 按部门查人员列表 zjx -->
+	<select id="selectByDepartmentId" resultClass="hashmap">
+		SELECT
+		A.USER_ID,A.USER_NAME,A.LOGIN_NAME,A.EXPIRED,A.BE_USE,A.MODIFY_TIME,A.DEPARTMENT_ID,A.STATE
+		FROM T_SYS_USERINFO A WHERE A.DEPARTMENT_ID = #DEPARTMENT_ID#
+	</select>
+	<!-- 获取登录用户的信息 -->
+	<select id="selectInfo" parameterClass="hashmap" resultClass="hashmap">
+		SELECT
+		A.USER_ID,A.USER_NAME,A.PASSWORD,A.LOGIN_NAME,A.STATE,B.PERSON_NAME,C.DEPARTMENT_ID,C.DEPARTMENT_NAME
+		FROM T_SYS_USERINFO A
+		LEFT JOIN T_SYS_PERSON B ON A.USER_ID =
+		B.PERSON_ID
+		LEFT JOIN T_SYS_DEPARTMENT C ON B.DEPARTMENT_ID =
+		C.DEPARTMENT_ID
+		<dynamic prepend="WHERE">
+			<isNotEmpty prepend="AND" property="USER_ID">
+				A.USER_ID = #USER_ID#
+			</isNotEmpty>
+			<isEmpty prepend="AND" property="USER_ID">
+				A.USER_ID = -1
+			</isEmpty>
+		</dynamic>
+	</select>
+	<!-- 验证登录名是否重复 -->
+	<select id="validateName" parameterClass="hashmap" resultClass="int">
+		SELECT COUNT(*) FROM T_SYS_USERINFO T WHERE USER_NAME = #LOGIN_NAME#
+	</select>
+	<!-- 验证登录名是否重复 -->
+	<select id="validateLoginName" parameterClass="hashmap"
+		resultClass="int">
+		SELECT COUNT(*) FROM T_SYS_USERINFO T WHERE LOGIN_NAME =
+		#LOGIN_NAME#
+	</select>
+	<!-- webservice根据账号，密码获取用户信息 (登录) -->
+	<select id="wslogin" parameterClass="hashmap" resultClass="hashmap">
+		SELECT
+		A.USER_ID,A.LOGIN_NAME,A.PASSWORD,B.PERSON_NAME,C.DEPARTMENT_ID,C.DEPARTMENT_NAME,DATE_FORMAT(A.EXPIRED,"%Y-%m-%d")
+		EXPIRED,A.BE_USE FROM T_SYS_USERINFO A
+		LEFT JOIN T_SYS_PERSON B ON
+		A.USER_ID = B.PERSON_ID
+		LEFT JOIN T_SYS_DEPARTMENT C ON B.DEPARTMENT_ID
+		= C.DEPARTMENT_ID
+		WHERE A.USER_NAME = #LOGIN_NAME# AND A.PASSWORD =
+		#PASSWORD#
+	</select>
+</sqlMap>

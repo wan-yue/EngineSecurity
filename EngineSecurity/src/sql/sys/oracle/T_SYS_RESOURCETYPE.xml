@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="T_SYS_RESOURCETYPE">
+	<!--ibatic注册
+	sql-map-config.xml 的注册字符串： <sqlMap resource="com/flying/dao/xml/T_SYS_RESOURCETYPE.xml" />
+	-->
+	<!--数据库注册
+	注册到数据库 ： INSERT INTO T_BASE_CONFIG(CDMC,YWMC,ZXSQLID) VALUE('资源类型信息','T_SYS_RESOURCETYPE','T_SYS_RESOURCETYPE.selectAll');
+	-->
+    <!--资源类型信息配置文件开始-->
+    <!--别名-->
+        <typeAlias alias="result" type="java.util.HashMap" />
+        <typeAlias alias="param" type="java.util.HashMap" />
+
+    <!-- 查询-->
+    <select id="selectAll"  parameterClass="param" resultClass="result">
+    	SELECT * FROM(
+			SELECT * FROM(
+			       SELECT ROWNUM ROW_NUM,A.RESOURCE_TYPE_ID,A.RESOURCE_TYPE_NAME FROM T_SYS_RESOURCETYPE A 
+			)    	
+			<isNotEmpty prepend="WHERE" property="filter">
+	    		$filter$
+	    	</isNotEmpty>
+    	) 
+    	<isNotEmpty prepend="WHERE" property="start">
+    		ROW_NUM BETWEEN  (#start#+1) and (#start#+#limit#)
+    	</isNotEmpty>
+    </select>
+    <select id="selectAllTotal" parameterClass="param" resultClass="int">
+    	SELECT COUNT(1) FROM T_SYS_RESOURCETYPE A
+    </select>
+    <select id="selectById" resultClass="result">
+    	SELECT A.RESOURCE_TYPE_ID,A.RESOURCE_TYPE_NAME FROM T_SYS_RESOURCETYPE A WHERE A.RESOURCE_TYPE_ID = #RESOURCE_TYPE_ID#
+    </select>
+    <!--插入-->
+	<insert id="insert" parameterClass="param">
+		<selectKey  resultClass ="string"  keyProperty ="RESOURCE_TYPE_ID" >   <![CDATA[ SELECT SYS_GUID() AS RESOURCE_TYPE_ID FROM DUAL ]]>     </selectKey >
+		INSERT INTO T_SYS_RESOURCETYPE(RESOURCE_TYPE_ID,RESOURCE_TYPE_NAME) 
+		VALUES (#RESOURCE_TYPE_ID:VARCHAR#,#RESOURCE_TYPE_NAME:VARCHAR#)
+    </insert>
+    <!--删除-->
+    <delete id="delete" parameterClass="param">
+		DELETE FROM T_SYS_RESOURCETYPE WHERE RESOURCE_TYPE_ID = #RESOURCE_TYPE_ID#
+	</delete>
+    <!--更新-->
+	<update id="update" parameterClass="param">
+		UPDATE  T_SYS_RESOURCETYPE SET RESOURCE_TYPE_NAME = #RESOURCE_TYPE_NAME:VARCHAR#
+		WHERE  RESOURCE_TYPE_ID = #RESOURCE_TYPE_ID#
+	</update> 
+</sqlMap>

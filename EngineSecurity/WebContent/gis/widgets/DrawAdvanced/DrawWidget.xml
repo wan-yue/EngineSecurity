@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <!-- Map and geometry service settings -->
+    <!-- <geometryservice>http://sampleserver3.arcgisonline.com/ArcGIS/rest/services/Geometry/GeometryServer</geometryservice> -->
+    <geometryservice>http://www.cjienc.com/agsrest/services/Geometry/GeometryServer</geometryservice>
+    <!--  2435	 Beijing_1954_3_Degree_GK_CM_114E -->
+    <spatialref>2435</spatialref>
+
+    <!-- If utilising an arcgis server version 10 or higher for queries, etc, the following setting should be set to true.  If utilising an ArcGIS 9.3x server, set to false -->
+	<useAMF>true</useAMF>
+    
+    <!-- Graphics layer name -->
+    <graphicsLayerName alias="Drawn Graphics" >RedLiningGraphicsLayer</graphicsLayerName>
+    
+    	<!-- Feature creation functionality -->
+    <createoptions>
+        <polygondrawtools>polygon,freehandpolygon,extent,autoComplete,circle,ellipse</polygondrawtools>
+        <polylinedrawtools>polyline,freehandpolyline,line</polylinedrawtools>
+    </createoptions>
+    
+    <!-- Toolbar functionality -->
+    <toolbarvisible>true</toolbarvisible>
+    <toolbarcutvisible>false</toolbarcutvisible>
+    <toolbarmergevisible>false</toolbarmergevisible>
+    <toolbarreshapevisible>false</toolbarreshapevisible>   
+    
+    
+    <!-- Widget labels -->
+	<labels>
+	    <!-- Widget menu labels -->
+		<drawlabel>绘图工具</drawlabel>
+		<measurementoptionslabel>测量和缓冲区设定</measurementoptionslabel>
+		<selectedgraphicslabel>选中的标绘图标</selectedgraphicslabel>
+		<graphicslistlabel>标绘列表</graphicslistlabel>
+		<openlabel>打开标绘文件</openlabel>
+		<savelabel>保存标绘</savelabel>
+		<uploadlabel>上传标绘</uploadlabel>
+		<unhandledlabel>未审核的标绘</unhandledlabel>
+		
+		<!-- Toolbar labels --> 
+		<pointToolLabel>画点</pointToolLabel>
+		<lineToolLabel>画线</lineToolLabel>
+		<freehandLineToolLabel>自由标绘的线</freehandLineToolLabel>
+		<polygonToolLabel>画多边形</polygonToolLabel>
+		<freehandPolygonToolLabel>自由标绘的多边形</freehandPolygonToolLabel>
+		<rectangleToolLabel>画矩形</rectangleToolLabel>
+		<circleToolLabel>画圆</circleToolLabel>
+		<ellipseToolLabel>画椭圆</ellipseToolLabel>
+		<textToolLabel>添加文本</textToolLabel>
+		<leaderTextToolLabel>Add Text with Leader</leaderTextToolLabel>
+		<selectToolLabel>选择要素</selectToolLabel>
+		<toolOptionsLabel>设置默认符号</toolOptionsLabel>
+		<clearToolLabel>删除所有要素</clearToolLabel>
+		<clearSelectionToolLabel>反选要素</clearSelectionToolLabel>
+	
+		<!-- Interactive Measurement Label Settings -->
+		<segmentlengthlabel>线段长度:</segmentlengthlabel>
+		<totallengthlabel>总长度:</totallengthlabel>
+	
+		<!-- Context menu labels -->
+		<clearfeaturelabel>删除要素</clearfeaturelabel>
+	</labels>
+	
+	
+	<!-- Symbol Templates -->
+	<defaulttemplates>
+		<!-- Simple Marker Templates -->
+		<template name="圆" description="简单圆形标绘" groupname="点标注" drawingtool="mappoint" type="marker" style="circle" alpha="1" colour="0xFF0000" size="15" angle="0" xoffset="0" yoffset="0" outlinewidth="2" outlinecolour="0xFFFFFF" outlinestyle="solid" outlinealpha="1" /> 
+		<template name="三角形" description="简单三角形标绘" groupname="点标注" drawingtool="mappoint" type="marker" style="triangle" alpha="1" colour="0x0000FF" size="15" angle="0" xoffset="0" yoffset="0" outlinewidth="2" outlinecolour="0xFFFFFF" outlinestyle="solid" outlinealpha="1" /> 
+		<template name="方块" description="简单方块标绘" groupname="点标注" drawingtool="mappoint" type="marker" style="square" alpha="1" colour="0x33CCEE" size="15" angle="0" xoffset="0" yoffset="0" outlinewidth="2" outlinecolour="0x000000" outlinestyle="solid" outlinealpha="1" /> 
+	
+		<!-- Simple Line Templates -->
+		<template name="红线" description="简单红线标绘" groupname="线标注" drawingtool="freehandLine" type="line" style="solid" alpha="1" colour="0xFF0000" width="1" /> 
+		<template name="蓝线" description="简单蓝线标绘" groupname="线标注" drawingtool="pointToPointLine" type="line" style="solid" alpha="1" colour="0x0000FF" width="1" /> 
+		<template name="绿线" description="简单绿线标绘" groupname="线标注" drawingtool="freehandLine" type="line" style="solid" alpha="1" colour="0x008000" width="1" /> 
+		<template name="白线" description="简单白线标绘" groupname="线标注" drawingtool="pointToPointLine" type="line" style="solid" alpha="1" colour="0xFFFFFF" width="2" /> 
+		<template name="虚线" description="简单虚线标绘" groupname="线标注" drawingtool="freehandLine" type="line" style="dash" alpha="1" colour="0x000033" width="2" /> 
+		<template name="点线" description="简单点线标绘" groupname="线标注" drawingtool="pointToPointLine" type="line" style="dot" alpha="1" colour="0x000033" width="2" /> 
+
+		<!-- Simple Fill Templates -->
+		<template name="空洞" description="只标绘边框" groupname="面标注" drawingtool="pointToPointPolygon" type="fill" style="null" alpha="0" colour="0x000000" outlinewidth="1" outlinecolour="0x000000" outlinestyle="solid" outlinealpha="1" /> 
+		<template name="绿色" description="绿色半透明标绘" groupname="面标注" drawingtool="pointToPointPolygon" type="fill" style="solid" alpha="0.6" colour="0x008B00" outlinewidth="0" outlinecolour="0xFFFFFF" outlinestyle="none" outlinealpha="0" /> 
+		<template name="玫瑰红" description="玫瑰红填充" groupname="面标注" drawingtool="pointToPointPolygon" type="fill" style="solid" alpha="1" colour="0xE33638" outlinewidth="1" outlinecolour="0x000000" outlinestyle="solid" outlinealpha="1" /> 
+		<template name="米色" description="米色填充" groupname="面标注" drawingtool="pointToPointPolygon" type="fill" style="solid" alpha="1" colour="0xF5F5DC" outlinewidth="1" outlinecolour="0x000000" outlinestyle="solid" outlinealpha="1" /> 
+		<template name="粉色" description="粉色填充" groupname="面标注" drawingtool="pointToPointPolygon" type="fill" style="solid" alpha="1" colour="0xFFBEE8" outlinewidth="1" outlinecolour="0x000000" outlinestyle="solid" outlinealpha="1" /> 
+		<template name="湖水蓝" description="湖水蓝填充" groupname="面标注" drawingtool="pointToPointPolygon" type="fill" style="solid" alpha="1" colour="0x7EC0EE" outlinewidth="1" outlinecolour="0x4876FF" outlinestyle="solid" outlinealpha="1" /> 
+		<template name="灰色" description="灰色填充" groupname="面标注" drawingtool="pointToPointPolygon" type="fill" style="solid" alpha="1" colour="0xC2C2C2" outlinewidth="1" outlinecolour="0x000000" outlinestyle="solid" outlinealpha="1" /> 
+		<template name="交叉线" description="交叉线填充" groupname="面标注" drawingtool="pointToPointPolygon" type="fill" style="diagonalcross" alpha="1" colour="0x000033" outlinewidth="1" outlinecolour="0x000033" outlinestyle="solid" outlinealpha="1" /> 
+
+		<!-- Text Templates -->
+		<template name="黑色文本" description="简单文本标绘" groupname="文本标注" drawingtool="text" type="text" font="Arial" fontsize="11" alpha="1" bold="true" italic="false" underline="false" colour="0x000000" border="false" borderColour="0x000000" background="false" 
+			backgroundColour="0x000000" placement="middle" angle="0" xoffset="0" yoffset="0" leftmargin="0" rightmargin="0" align="center" />
+
+	</defaulttemplates>
+	
+	<!-- Help Location Settings -->
+	<helplocationurl></helplocationurl>
+</configuration>

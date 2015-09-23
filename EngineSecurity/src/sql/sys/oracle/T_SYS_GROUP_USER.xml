@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="T_SYS_GROUP_USER">
+    <!--私有组人员关系表配置文件开始-->
+    <!--别名-->
+    <typeAlias alias="hashmap" type="java.util.HashMap" />
+
+    <!-- 查询【私有组人员关系表】所有数据-->
+    <select id="selectAll"  parameterClass="hashmap" resultClass="hashmap">
+    	SELECT * FROM(
+			SELECT ROWNUM ROW_NUM,B.* FROM(
+			       SELECT A.GROUP_USER_ID,A.GROUP_ID,A.USER_ID FROM T_SYS_GROUP_USER A 
+			       <isNotEmpty prepend="" property="order">
+	    				$order$
+	    		   </isNotEmpty>
+	    		   <isEmpty prepend="" property="order">
+	    		   		ORDER BY GROUP_USER_ID  DESC
+	    		   </isEmpty>
+			) B   	
+			<isNotEmpty prepend="WHERE" property="filter">
+	    		($filter$)
+	    	</isNotEmpty>
+    	) 
+    	<isNotEmpty prepend="WHERE" property="start">
+    		ROW_NUM BETWEEN  (#start#+1) and (#start#+#limit#)
+    	</isNotEmpty>
+    </select>
+    <select id="selectAllTotal" parameterClass="hashmap" resultClass="int">
+    	SELECT COUNT(1) FROM (
+    		SELECT A.GROUP_USER_ID,A.GROUP_ID,A.USER_ID FROM T_SYS_GROUP_USER A 
+    		<isNotEmpty prepend="WHERE" property="filter">
+    		    	($filter$)
+    		</isNotEmpty>
+    	) B
+    </select>
+    <!--根据ID删除【私有组人员关系表】-->
+    <select id="selectById" resultClass="hashmap">
+    	SELECT A.GROUP_USER_ID,A.GROUP_ID,A.USER_ID FROM T_SYS_GROUP_USER A WHERE A.GROUP_USER_ID = #GROUP_USER_ID#
+    </select>
+    <!--添加【私有组人员关系表】-->
+	<insert id="insert" parameterClass="hashmap">
+		<selectKey  resultClass ="string"  keyProperty ="GROUP_USER_ID" >   <![CDATA[ SELECT SYS_GUID() AS GROUP_USER_ID FROM DUAL ]]>     </selectKey >
+		INSERT INTO T_SYS_GROUP_USER(GROUP_USER_ID,GROUP_ID,USER_ID) 
+		VALUES (#GROUP_USER_ID:VARCHAR#,#GROUP_ID:VARCHAR#,#USER_ID:VARCHAR#)
+    </insert>
+    <!--根据ID删除【私有组人员关系表】-->
+    <delete id="delete" parameterClass="hashmap">
+		DELETE FROM T_SYS_GROUP_USER WHERE GROUP_USER_ID = #GROUP_USER_ID#
+	</delete>
+    <!--修改【私有组人员关系表】-->
+	<update id="update" parameterClass="hashmap">
+		UPDATE  T_SYS_GROUP_USER SET GROUP_ID = #GROUP_ID:VARCHAR#,USER_ID = #USER_ID:VARCHAR#
+		WHERE  GROUP_USER_ID = #GROUP_USER_ID#
+	</update> 
+	<!-- 通过外键查询 【私有组人员关系表】-->
+	<select id="selectByFk" parameterClass="hashmap" resultClass="hashmap">
+    	SELECT A.GROUP_USER_ID,A.GROUP_ID,A.USER_ID FROM T_SYS_GROUP_USER A
+    	<dynamic prepend="WHERE">
+			<isNotEmpty property="GROUP_ID" prepend="AND">
+				GROUP_ID = #GROUP_ID#
+			</isNotEmpty>
+			<isNotEmpty property="USER_ID" prepend="AND">
+				USER_ID = #USER_ID#
+			</isNotEmpty>
+		</dynamic>
+    </select>
+     <!--根据GROUP_ID删除【私有组人员关系表】-->
+    <delete id="deleteByGroupId" parameterClass="hashmap">
+		DELETE FROM T_SYS_GROUP_USER WHERE GROUP_ID = #GROUP_ID#
+	</delete>
+</sqlMap>

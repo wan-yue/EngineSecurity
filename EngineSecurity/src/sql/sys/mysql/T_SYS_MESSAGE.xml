@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="T_SYS_MESSAGE">
+	<!--消息表管理配置文件开始 -->
+	<!--别名 -->
+	<typeAlias alias="hashmap" type="java.util.HashMap" />
+
+	<!-- 查询【消息表管理】所有数据 -->
+	<select id="selectAll" parameterClass="hashmap" resultClass="hashmap">
+		SELECT
+		A.MSG_ID,A.MSG_TITLE,A.MSG_ADDR,A.MSG_ADDR_PARAM,A.MSG_RECIPIENT,A.MSG_SENDER,DATE_FORMAT(A.SEND_DATE,"%Y-%m-%d")
+		SEND_DATE,A.SYS_NAME,A.IS_VIEW,A.MSG_TOKEN FROM T_SYS_MESSAGE A
+		<isNotEmpty prepend="WHERE" property="filter">
+			$filter$
+		</isNotEmpty>
+		<isNotEmpty prepend="" property="order">
+			$order$
+		</isNotEmpty>
+		<isEmpty prepend="" property="order">
+			ORDER BY MSG_ID DESC
+		</isEmpty>
+		<isNotEmpty prepend="" property="start">
+			LIMIT #start#,#limit#
+		</isNotEmpty>
+	</select>
+	<select id="selectAllTotal" parameterClass="hashmap"
+		resultClass="int">
+		SELECT COUNT(1) FROM (
+		SELECT
+		A.MSG_ID,A.MSG_TITLE,A.MSG_ADDR,A.MSG_ADDR_PARAM,A.MSG_RECIPIENT,A.MSG_SENDER,DATE_FORMAT(A.SEND_DATE,"%Y-%m-%d") 
+		SEND_DATE,A.SYS_NAME,A.IS_VIEW,A.MSG_TOKEN FROM T_SYS_MESSAGE A
+		WHERE A.MSG_RECIPIENT = #USER_ID#
+		<isNotEmpty prepend="AND" property="filter">
+			($filter$)
+		</isNotEmpty>
+		) B
+	</select>
+	<!--根据ID删除【消息表管理】 -->
+	<select id="selectById" resultClass="hashmap">
+		SELECT
+		A.MSG_ID,A.MSG_TITLE,A.MSG_ADDR,A.MSG_ADDR_PARAM,A.MSG_RECIPIENT,A.MSG_SENDER,DATE_FORMAT(A.SEND_DATE,"%Y-%m-%d")
+		SEND_DATE,A.SYS_NAME,A.IS_VIEW,A.MSG_TOKEN FROM T_SYS_MESSAGE A WHERE
+		A.MSG_ID = #MSG_ID#
+	</select>
+	<!--添加【消息表管理】 -->
+	<insert id="insert" parameterClass="hashmap">
+		<selectKey resultClass="string" keyProperty="MSG_ID">   <![CDATA[ SELECT UPPER(REPLACE(UUID(),'-','')) AS MSG_ID ]]>
+		</selectKey>
+		INSERT INTO
+		T_SYS_MESSAGE(MSG_ID,MSG_TITLE,MSG_ADDR,MSG_ADDR_PARAM,MSG_RECIPIENT,MSG_SENDER,SEND_DATE,SYS_NAME,IS_VIEW,MSG_TOKEN)
+		VALUES
+		(#MSG_ID:VARCHAR#,#MSG_TITLE:VARCHAR#,#MSG_ADDR:VARCHAR#,#MSG_ADDR_PARAM:VARCHAR#,#MSG_RECIPIENT:VARCHAR#,#MSG_SENDER:VARCHAR#,#SEND_DATE:DATE#,#SYS_NAME:VARCHAR#,#IS_VIEW:INTEGER#,#MSG_TOKEN:VARCHAR#)
+	</insert>
+	<!--根据ID删除【消息表管理】 -->
+	<delete id="delete" parameterClass="hashmap">
+		DELETE FROM T_SYS_MESSAGE
+		WHERE MSG_ID = #MSG_ID#
+	</delete>
+	<!--修改【消息表管理】 -->
+	<update id="update" parameterClass="hashmap">
+		UPDATE T_SYS_MESSAGE SET
+		MSG_TITLE = #MSG_TITLE:VARCHAR#,MSG_ADDR =
+		#MSG_ADDR:VARCHAR#,MSG_ADDR_PARAM =
+		#MSG_ADDR_PARAM:VARCHAR#,MSG_RECIPIENT =
+		#MSG_RECIPIENT:VARCHAR#,MSG_SENDER = #MSG_SENDER:VARCHAR#,SEND_DATE =
+		#SEND_DATE:DATE#,SYS_NAME = #SYS_NAME:VARCHAR#,IS_VIEW =
+		#IS_VIEW:INTEGER#,MSG_TOKEN = #MSG_TOKEN:VARCHAR#
+		WHERE MSG_ID =
+		#MSG_ID#
+	</update>
+	<!-- 获取用户未读消息 -->
+	<select id="getUserMessage" parameterClass="hashmap"
+		resultClass="hashmap">
+		SELECT
+		A.MSG_TITLE,A.MSG_ADDR,A.MSG_RECIPIENT,A.MSG_SENDER,B.USER_NAME
+		MSG_SENDER_NAME,DATE_FORMAT(A.SEND_DATE,"%Y-%m-%d")
+		SEND_DATE,A.SYS_NAME,A.IS_VIEW,A.MSG_ID,A.MSG_ADDR_PARAM,A.MSG_TOKEN
+		FROM T_SYS_MESSAGE A
+		LEFT JOIN T_SYS_USERINFO B ON A.MSG_SENDER = B.USER_ID
+		WHERE A.IS_VIEW IN (0,1,3) AND A.MSG_RECIPIENT = #USER_ID#
+		ORDER BY
+		SEND_DATE DESC
+	</select>
+	<select id="getUserMessageTotal" parameterClass="hashmap"
+		resultClass="int">
+		SELECT COUNT(1) FROM T_SYS_MESSAGE A
+		WHERE A.IS_VIEW IN (0,1,3) AND A.MSG_RECIPIENT = #USER_ID#
+	</select>
+	<!--读取消息 -->
+	<update id="T_SYS_MESSAGE.deleteMessage" parameterClass="hashmap">
+		UPDATE
+		T_SYS_MESSAGE SET IS_VIEW = 2
+		WHERE MSG_ID = #MSG_ID#
+	</update>
+	<!--读取一个角色多人发送的相同消息 -->
+	<update id="readSameMessage" parameterClass="hashmap">
+		UPDATE T_SYS_MESSAGE
+		SET IS_VIEW = 1
+		WHERE MSG_TOKEN = #MSG_TOKEN#
+	</update>
+</sqlMap>

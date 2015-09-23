@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="T_SYS_DEPARTMENT">
+    <!--部门信息配置文件开始-->
+    <!--别名-->
+    <typeAlias alias="hashmap" type="java.util.HashMap" />
+
+    <!-- 查询【部门信息】所有数据-->
+    <select id="selectAll"  parameterClass="hashmap" resultClass="hashmap">
+    	SELECT * FROM(
+			SELECT ROWNUM ROW_NUM,B.* FROM(
+			       SELECT A.DEPARTMENT_ID,A.DEPARTMENT_CODE,A.DEPARTMENT_NAME,A.PID,A.LEVEL_ID,A.ORDER_ID FROM T_SYS_DEPARTMENT A 
+			       <isNotEmpty prepend="" property="order">
+	    				$order$
+	    		   </isNotEmpty>
+	    		   <isEmpty prepend="" property="order">
+	    		   		ORDER BY DEPARTMENT_ID  DESC
+	    		   </isEmpty>
+			) B   	
+			<isNotEmpty prepend="WHERE" property="filter">
+	    		($filter$)
+	    	</isNotEmpty>
+    	) 
+    	<isNotEmpty prepend="WHERE" property="start">
+    		ROW_NUM BETWEEN  (#start#+1) and (#start#+#limit#)
+    	</isNotEmpty>
+    </select>
+    <select id="selectAllTotal" parameterClass="hashmap" resultClass="int">
+    	SELECT COUNT(1) FROM (
+    		SELECT A.DEPARTMENT_ID,A.DEPARTMENT_CODE,A.DEPARTMENT_NAME,A.PID,A.LEVEL_ID,A.ORDER_ID FROM T_SYS_DEPARTMENT A 
+    		<isNotEmpty prepend="WHERE" property="filter">
+    		    	($filter$)
+    		</isNotEmpty>
+    	) B
+    </select>
+    <!--根据ID删除【部门信息】-->
+    <select id="selectById" resultClass="hashmap">
+    	SELECT A.DEPARTMENT_ID,A.DEPARTMENT_CODE,A.DEPARTMENT_NAME,A.PID,A.LEVEL_ID,A.ORDER_ID FROM T_SYS_DEPARTMENT A WHERE A.DEPARTMENT_ID = #DEPARTMENT_ID#
+    </select>
+    <!--添加【部门信息】-->
+	<insert id="insert" parameterClass="hashmap">
+		<selectKey  resultClass ="string"  keyProperty ="DEPARTMENT_ID" >   <![CDATA[ SELECT SYS_GUID() AS DEPARTMENT_ID FROM DUAL ]]>     </selectKey >
+		INSERT INTO T_SYS_DEPARTMENT(DEPARTMENT_ID,DEPARTMENT_CODE,DEPARTMENT_NAME,PID,LEVEL_ID,ORDER_ID) 
+		VALUES (#DEPARTMENT_ID:VARCHAR#,#DEPARTMENT_CODE:VARCHAR#,#DEPARTMENT_NAME:VARCHAR#,#PID:INTEGER#,#LEVEL_ID:INTEGER#,#ORDER_ID:INTEGER#)
+    </insert>
+    <!--根据ID删除【部门信息】-->
+    <delete id="delete" parameterClass="hashmap">
+		DELETE FROM T_SYS_DEPARTMENT WHERE DEPARTMENT_ID = #DEPARTMENT_ID#
+	</delete>
+    <!--修改【部门信息】-->
+	<update id="update" parameterClass="hashmap">
+		UPDATE  T_SYS_DEPARTMENT SET DEPARTMENT_CODE = #DEPARTMENT_CODE:VARCHAR#,DEPARTMENT_NAME = #DEPARTMENT_NAME:VARCHAR#,PID = #PID:INTEGER#,LEVEL_ID = #LEVEL_ID:INTEGER#,ORDER_ID = #ORDER_ID:INTEGER#
+		WHERE  DEPARTMENT_ID = #DEPARTMENT_ID#
+	</update> 
+	<select id="selectAllList"  parameterClass="hashmap" resultClass="hashmap">
+    	SELECT A.DEPARTMENT_ID,A.DEPARTMENT_CODE,A.DEPARTMENT_NAME,A.PID,A.LEVEL_ID,A.ORDER_ID FROM T_SYS_DEPARTMENT A 
+    </select>
+    <select id="selectByParentId" resultClass="hashmap">
+    	SELECT A.DEPARTMENT_ID,A.DEPARTMENT_CODE,A.DEPARTMENT_NAME,A.PID,A.LEVEL_ID,A.ORDER_ID FROM T_SYS_DEPARTMENT A WHERE A.PID = #PID#
+    </select>
+    <!--更新排序-->
+	<update id="updateSort" parameterClass="param">
+		UPDATE  ZZJGXX SET PXH = #PXH:INTEGER# 
+		WHERE  ZZJGDM = #ZZJGDM#
+	</update> 
+</sqlMap>

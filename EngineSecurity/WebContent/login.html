@@ -1,0 +1,156 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>数字航道维护管理平台</title>
+<link rel="stylesheet" type="text/css" href="extjs/resources/css/ext-all.css" />
+<link href="css/login.css" rel="stylesheet" type="text/css" />
+<link rel="icon" href="img/title.ico" type="image/x-icon" />
+<link rel= "shortcut icon"   href= "img/title.ico" type="image/x-icon" />
+<link rel= "bookmark"   href= "img/title.ico" type="image/x-icon" />
+
+
+<script type="text/javascript" src="extjs/adapter/ext/ext-base.js"></script>
+<script type="text/javascript" src="extjs/ext-all-debug.js"></script>
+<script type="text/javascript" src="extjs/ux/flying-init.js"></script>
+
+<script src="jquery/jquery-1.8.1.min.js" type="text/javascript" ></script>
+<script type="text/javascript">
+ var login = {};
+ 
+ $(document).ready(function(){
+
+   $("#focus .input").each(function(){
+     var thisVal=$(this).val();
+     //判断文本框的值是否为空，有值的情况就隐藏提示语，没有值就显示
+     if(thisVal!=""){
+       $(this).siblings("label").hide();
+      }else{
+       $(this).siblings("label").show();
+      }
+     //聚焦型输入框验证 
+     $(this).focus(function(){
+       $(this).siblings("label").hide();
+      }).blur(function(){
+        var val=$(this).val();
+        if(val!=""){
+         $(this).siblings("label").hide();
+        }else{
+         $(this).siblings("label").show();
+        } 
+      });
+    })
+    $("#keydown .input").each(function(){
+     var thisVal=$(this).val();
+     //判断文本框的值是否为空，有值的情况就隐藏提示语，没有值就显示
+     if(thisVal!=""){
+       $(this).siblings("label").hide();
+      }else{
+       $(this).siblings("label").show();
+      }
+      $(this).keyup(function(){
+       var val=$(this).val();
+       $(this).siblings("label").hide();
+      }).blur(function(){
+        var val=$(this).val();
+        if(val!=""){
+         $(this).siblings("label").hide();
+        }else{
+         $(this).siblings("label").show();
+        }
+       })
+     }) 
+  })
+  
+   function refresh(obj) {       
+	 obj.src = "ValidateCodeServlet?"+Math.random();    
+   }
+  
+  Ext.onReady(function() {
+	  Ext.getBody().addKeyListener(13,function(){
+		  login.submit();
+	  });
+	  
+	  login.submit = function(){
+		 	var loginName = Ext.get("userInput").getValue();
+			if(loginName == ""){
+				Ext.Msg.show({
+					title : '温馨提示',
+					msg : "用户名不能为空！",
+					buttons : Ext.Msg.OK,
+					icon : Ext.Msg.WARNING
+				});
+				return;
+			}
+			
+		 	var password = Ext.get("passwordInput").getValue();
+		 	if(password == ""){
+				Ext.Msg.show({
+					title : '温馨提示',
+					msg : "密码不能为空！",
+					buttons : Ext.Msg.OK,
+					icon : Ext.Msg.WARNING
+				});
+				return;
+			}
+		 	
+		 	var validateCode = Ext.get("validateCodeInput").getValue();
+		 	if(validateCode == ""){
+				Ext.Msg.show({
+					title : '温馨提示',
+					msg : "验证码不能为空！",
+					buttons : Ext.Msg.OK,
+					icon : Ext.Msg.WARNING
+				});
+				return;
+			}
+		 	var url = "common.action?command=T_SYS_USERINFO.login";
+		 	
+		 	Ext.Ajax.request({
+				url : url,
+				params : {"LOGIN_NAME" : loginName , "PASSWORD" : password ,"VALIDATECODE" : validateCode },
+				method : 'post',
+				success : function(response, opts) {
+					var obj= Ext.util.JSON.decode(response.responseText);
+					
+					Ext.Msg.show({
+						title : '错误提示',
+						msg : obj.msg,
+						buttons : Ext.Msg.OK,
+						icon : Ext.Msg.ERROR
+					});
+				}
+			});
+	  }
+  });
+
+</script>
+</head>
+
+<body>
+<div class="wrapper">
+	<div class="logo">电子海图管理系统</div>
+    <div class="login">
+    	<div class="til">管理登录</div>
+        <div id="focus">
+            <div class="input-item">
+                <label for="userInput">用户...</label>
+                <input type="text" id="userInput" class="input" name="LOGIN_NAME" />
+            </div>
+            <div class="input-item">
+                <label for="passwordInput">密码...</label>
+                <input type="password" id="passwordInput" class="input" name="PASSWORD" />
+            </div>
+            <div class="input-item verification">
+                <label for="validateCodeInput">验证码...</label>
+                <input type="text" id="validateCodeInput" class="input" name="VALIDATECODE" />
+                <img title="点击更换" onclick="javascript:refresh(this);" src="ValidateCodeServlet" />
+            </div>
+            <div class="submit">
+                <input type="button" value="" class="btn" onclick="login.submit();" />
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="T_SYS_USERRESOURCE">
+	<!--用户资源表配置文件开始 -->
+	<!--别名 -->
+	<typeAlias alias="hashmap" type="java.util.HashMap" />
+
+	<!-- 查询【用户资源表】所有数据 -->
+	<select id="selectAll" parameterClass="hashmap" resultClass="hashmap">
+		SELECT DISTINCT A.* FROM (
+		SELECT DISTINCT
+		T1.USER_ID,T1.RESOURCE_ID,T1.FACETYPE,T1.DESKTOP,T1.ICON,T2.RESOURCE_ADDR,T2.RESOURCE_NAME,T2.PID,T2.FACETYPE
+		COMMONFACETYPE,T2.CACHE FROM T_SYS_USERRESOURCE T1
+		LEFT JOIN T_SYS_RESOURCE T2 ON T1.RESOURCE_ID = T2.RESOURCE_ID WHERE
+		T2.RESOURCE_TYPE_ID ='19AADE52436C4FA99BC3B9897E7B9408' ORDER BY T1.SORT_NUM DESC,T1.RESOURCE_ID DESC )
+		A
+		<isNotEmpty prepend="WHERE" property="filter">
+			$filter$
+		</isNotEmpty>
+		<isNotEmpty prepend="" property="order">
+			$order$
+		</isNotEmpty>
+		<isNotEmpty prepend="" property="start">
+			LIMIT #start#,#limit#
+		</isNotEmpty>
+	</select>
+	<select id="selectAllTotal" parameterClass="hashmap"
+		resultClass="int">
+		SELECT COUNT(1) FROM (
+		SELECT
+		A.USER_RESOURCE_ID,A.USER_ID,A.RESOURCE_ID,A.ROLE_ID,A.FACETYPE,A.DESKTOP,A.ICON
+		FROM T_SYS_USERRESOURCE A
+		<isNotEmpty prepend="WHERE" property="filter">
+			($filter$)
+		</isNotEmpty>
+		) B
+	</select>
+	<!--根据ID删除【用户资源表】 -->
+	<select id="selectById" resultClass="hashmap">
+		SELECT
+		A.USER_RESOURCE_ID,A.USER_ID,A.RESOURCE_ID,A.ROLE_ID,A.FACETYPE,A.DESKTOP,A.ICON,A.SORT_NUM
+		FROM T_SYS_USERRESOURCE A WHERE A.USER_RESOURCE_ID =
+		#USER_RESOURCE_ID#
+	</select>
+	<!--添加【用户资源表】 -->
+	<insert id="insert" parameterClass="hashmap">
+		<selectKey resultClass="string" keyProperty="USER_RESOURCE_ID">   <![CDATA[ SELECT UPPER(REPLACE(UUID(),'-','')) AS USER_RESOURCE_ID ]]>
+		</selectKey>
+		INSERT INTO
+		T_SYS_USERRESOURCE(USER_RESOURCE_ID,USER_ID,RESOURCE_ID,ROLE_ID,FACETYPE,DESKTOP,ICON,SORT_NUM)
+		VALUES
+		(#USER_RESOURCE_ID:VARCHAR#,#USER_ID:VARCHAR#,#RESOURCE_ID:VARCHAR#,#ROLE_ID:VARCHAR#,#FACETYPE:VARCHAR#,#DESKTOP:INTEGER#,#ICON:VARCHAR#,#SORT_NUM:INTEGER#)
+	</insert>
+	<!--删除 -->
+	<delete id="delete" parameterClass="hashmap">
+		DELETE FROM T_SYS_USERRESOURCE
+		<dynamic prepend="WHERE">
+			<isNotEmpty property="USER_RESOURCE_ID" prepend="AND">
+				USER_RESOURCE_ID = #USER_RESOURCE_ID#
+			</isNotEmpty>
+			<isNotEmpty property="USER_ID" prepend="AND">
+				USER_ID = #USER_ID#
+			</isNotEmpty>
+			<isNotEmpty property="ROLE_ID" prepend="AND">
+				ROLE_ID = #ROLE_ID#
+			</isNotEmpty>
+			<isNotEmpty property="RESOURCE_ID" prepend="AND">
+				RESOURCE_ID =
+				#RESOURCE_ID#
+			</isNotEmpty>
+		</dynamic>
+	</delete>
+	<!--修改【用户资源表】 -->
+	<update id="update" parameterClass="hashmap">
+		UPDATE T_SYS_USERRESOURCE SET
+		USER_ID = #USER_ID:VARCHAR#,RESOURCE_ID =
+		#RESOURCE_ID:VARCHAR#,ROLE_ID = #ROLE_ID:VARCHAR#,FACETYPE =
+		#FACETYPE:VARCHAR#,DESKTOP = #DESKTOP:INTEGER#,ICON =
+		#ICON:VARCHAR#,SORT_NUM = #SORT_NUM:INTEGER#
+		WHERE USER_RESOURCE_ID =
+		#USER_RESOURCE_ID#
+	</update>
+	<!--修改【用户资源表】 -->
+	<update id="updateByUserIdResourceId" parameterClass="hashmap">
+		UPDATE
+		T_SYS_USERRESOURCE SET FACETYPE = #FACETYPE:VARCHAR#,DESKTOP =
+		#DESKTOP:INTEGER#,ICON = #ICON:VARCHAR#
+		WHERE RESOURCE_ID = #RESOURCE_ID# AND USER_ID = #USER_ID#
+	</update>
+	<!--通过外键ID查询【用户资源表】 -->
+	<select id="selectByFk" parameterClass="hashmap" resultClass="hashmap">
+		SELECT DISTINCT
+		A.USER_ID,A.RESOURCE_ID,A.ROLE_ID,A.FACETYPE,A.DESKTOP,A.ICON FROM
+		T_SYS_USERRESOURCE A
+		<dynamic prepend="WHERE">
+			<isNotEmpty property="USER_ID" prepend="AND">
+				USER_ID = #USER_ID#
+			</isNotEmpty>
+			<isNotEmpty property="ROLE_ID" prepend="AND">
+				ROLE_ID = #ROLE_ID#
+			</isNotEmpty>
+			<isNotEmpty property="RESOURCE_ID" prepend="AND">
+				RESOURCE_ID =
+				#RESOURCE_ID#
+			</isNotEmpty>
+		</dynamic>
+	</select>
+	<!--查询子菜单 -->
+	<select id="selectSubMenu" resultClass="hashmap" parameterClass="hashmap">
+		<![CDATA[
+    	SELECT DISTINCT A.* FROM (
+    		SELECT DISTINCT T1.USER_ID,T1.RESOURCE_ID,T1.FACETYPE,T1.DESKTOP,T1.ICON,T2.RESOURCE_CODE,T2.RESOURCE_ADDR,T2.RESOURCE_NAME,T2.PID,T2.FACETYPE COMMONFACETYPE,T2.CACHE,T2.SORT_NUM FROM T_SYS_USERRESOURCE T1 
+			LEFT JOIN T_SYS_RESOURCE T2 ON T1.RESOURCE_ID = T2.RESOURCE_ID WHERE T2.RESOURCE_TYPE_ID ='19AADE52436C4FA99BC3B9897E7B9408' 
+		) A  
+		]]>
+		<dynamic prepend="WHERE">
+			<isNotEmpty prepend="AND" property="filter">
+				$filter$
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="RESOURCE_CODE">
+				RESOURCE_CODE LIKE #RESOURCE_CODE#
+			</isNotEmpty>
+		</dynamic>
+		ORDER BY SORT_NUM
+	</select>
+	<!--修改【用户资源表】 -->
+	<update id="updateByResourceId" parameterClass="hashmap">
+		UPDATE
+		T_SYS_USERRESOURCE SET FACETYPE = #FACETYPE:VARCHAR#,ICON =
+		#ICON:VARCHAR#,SORT_NUM = #SORT_NUM:INTEGER#
+		WHERE RESOURCE_ID =
+		#RESOURCE_ID#
+	</update>
+	<!--通过用户ID查询【用户资源表】 -->
+	<select id="selectResourceByUserIdByGroup" parameterClass="hashmap"
+		resultClass="hashmap">
+		SELECT RESOURCE_ID,FACETYPE FROM T_SYS_USERRESOURCE T WHERE FACETYPE
+		IS NOT NULL
+		<isNotEmpty property="USER_ID" prepend="AND">
+			USER_ID = #USER_ID#
+		</isNotEmpty>
+		GROUP BY RESOURCE_ID,FACETYPE
+	</select>
+</sqlMap>

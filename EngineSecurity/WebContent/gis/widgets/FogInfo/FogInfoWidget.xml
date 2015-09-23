@@ -1,0 +1,5 @@
+<?xml version="1.0" ?>
+<configuration>
+	<fogservice>http://www.cjienc.com/axis2/services/signalservice?wsdl</fogservice>
+	<shipClientService>http://www.cjienc.com/axis2/services/ShipClientService?wsdl</shipClientService>
+</configuration>

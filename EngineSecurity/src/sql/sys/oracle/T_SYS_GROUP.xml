@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="T_SYS_GROUP">
+    <!--私有组管理配置文件开始-->
+    <!--别名-->
+    <typeAlias alias="hashmap" type="java.util.HashMap" />
+
+    <!-- 查询【私有组管理】所有数据-->
+    <select id="selectAll"  parameterClass="hashmap" resultClass="hashmap">
+    	SELECT * FROM(
+			SELECT ROWNUM ROW_NUM,B.* FROM(
+			       SELECT A.GROUP_ID,A.GROUP_NAME,A.PID,A.IS_DEPT,A.IS_SHARE,A.USER_ID FROM T_SYS_GROUP A 
+			       <isNotEmpty prepend="" property="order">
+	    				$order$
+	    		   </isNotEmpty>
+	    		   <isEmpty prepend="" property="order">
+	    		   		ORDER BY GROUP_ID  DESC
+	    		   </isEmpty>
+			) B   	
+			<isNotEmpty prepend="WHERE" property="filter">
+	    		($filter$)
+	    	</isNotEmpty>
+    	) 
+    	<isNotEmpty prepend="WHERE" property="start">
+    		ROW_NUM BETWEEN  (#start#+1) and (#start#+#limit#)
+    	</isNotEmpty>
+    </select>
+    <select id="selectAllTotal" parameterClass="hashmap" resultClass="int">
+    	SELECT COUNT(1) FROM (
+    		SELECT A.GROUP_ID,A.GROUP_NAME,A.PID,A.IS_DEPT,A.IS_SHARE,A.USER_ID FROM T_SYS_GROUP A 
+    		<isNotEmpty prepend="WHERE" property="filter">
+    		    	($filter$)
+    		</isNotEmpty>
+    	) B
+    </select>
+    <!--根据ID删除【私有组管理】-->
+    <select id="selectById" resultClass="hashmap">
+    	SELECT A.GROUP_ID,A.GROUP_NAME,A.PID,A.IS_DEPT,A.IS_SHARE,A.USER_ID FROM T_SYS_GROUP A WHERE A.GROUP_ID = #GROUP_ID#
+    </select>
+    <!--添加【私有组管理】-->
+	<insert id="insert" parameterClass="hashmap">
+		<selectKey  resultClass ="string"  keyProperty ="GROUP_ID" >   <![CDATA[ SELECT SYS_GUID() AS GROUP_ID FROM DUAL ]]>     </selectKey >
+		INSERT INTO T_SYS_GROUP(GROUP_ID,GROUP_NAME,PID,IS_DEPT,IS_SHARE,USER_ID) 
+		VALUES (#GROUP_ID:VARCHAR#,#GROUP_NAME:VARCHAR#,#PID:VARCHAR#,#IS_DEPT:INTEGER#,#IS_SHARE:INTEGER#,#USER_ID:VARCHAR#)
+    </insert>
+    <!--根据ID删除【私有组管理】-->
+    <delete id="delete" parameterClass="hashmap">
+		DELETE FROM T_SYS_GROUP WHERE GROUP_ID = #GROUP_ID#
+	</delete>
+    <!--修改【私有组管理】-->
+	<update id="update" parameterClass="hashmap">
+		UPDATE  T_SYS_GROUP SET GROUP_NAME = #GROUP_NAME:VARCHAR#,PID = #PID:VARCHAR#,IS_DEPT = #IS_DEPT:INTEGER#,IS_SHARE = #IS_SHARE:INTEGER#,USER_ID = #USER_ID:VARCHAR#
+		WHERE  GROUP_ID = #GROUP_ID#
+	</update>
+	 <!--根据PID删除【私有组管理】-->
+    <select id="selectByPid" resultClass="hashmap">
+    	SELECT A.GROUP_ID,A.GROUP_NAME,A.PID,A.IS_DEPT,A.IS_SHARE,A.USER_ID FROM T_SYS_GROUP A WHERE A.PID = #PID#
+    </select>
+</sqlMap>

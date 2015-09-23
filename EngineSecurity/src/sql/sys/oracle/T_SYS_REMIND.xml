@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="T_SYS_REMIND">
+    <!--提醒管理配置文件开始-->
+    <!--别名-->
+    <typeAlias alias="hashmap" type="java.util.HashMap" />
+
+    <!-- 查询【提醒管理】所有数据-->
+    <select id="selectAll"  parameterClass="hashmap" resultClass="hashmap">
+    	SELECT * FROM(
+			SELECT ROWNUM ROW_NUM,B.* FROM(
+			       SELECT A.REMIND_ID,A.SYS_NAME,A.LINK_ADDR,A.USER_ID,A.REMIND_SIZE FROM T_SYS_REMIND A 
+			       <isNotEmpty prepend="" property="order">
+	    				$order$
+	    		   </isNotEmpty>
+	    		   <isEmpty prepend="" property="order">
+	    		   		ORDER BY REMIND_ID  DESC
+	    		   </isEmpty>
+			) B   	
+			<isNotEmpty prepend="WHERE" property="filter">
+	    		($filter$)
+	    	</isNotEmpty>
+    	) 
+    	<isNotEmpty prepend="WHERE" property="start">
+    		ROW_NUM BETWEEN  (#start#+1) and (#start#+#limit#)
+    	</isNotEmpty>
+    </select>
+    <select id="selectAllTotal" parameterClass="hashmap" resultClass="int">
+    	SELECT COUNT(1) FROM (
+    		SELECT A.REMIND_ID,A.SYS_NAME,A.LINK_ADDR,A.USER_ID,A.REMIND_SIZE FROM T_SYS_REMIND A 
+    		<isNotEmpty prepend="WHERE" property="filter">
+    		    	($filter$)
+    		</isNotEmpty>
+    	) B
+    </select>
+    <!--根据ID删除【提醒管理】-->
+    <select id="selectById" resultClass="hashmap">
+    	SELECT A.REMIND_ID,A.SYS_NAME,A.LINK_ADDR,A.USER_ID,A.REMIND_SIZE FROM T_SYS_REMIND A WHERE A.REMIND_ID = #REMIND_ID#
+    </select>
+    <!--添加【提醒管理】-->
+	<insert id="insert" parameterClass="hashmap">
+		<selectKey  resultClass ="string"  keyProperty ="REMIND_ID" >   <![CDATA[ SELECT SYS_GUID() AS REMIND_ID FROM DUAL ]]>     </selectKey >
+		INSERT INTO T_SYS_REMIND(REMIND_ID,SYS_NAME,LINK_ADDR,USER_ID,REMIND_SIZE) 
+		VALUES (#REMIND_ID:VARCHAR#,#SYS_NAME:VARCHAR#,#LINK_ADDR:VARCHAR#,#USER_ID:VARCHAR#,#REMIND_SIZE:INTEGER#)
+    </insert>
+    <!--根据ID删除【提醒管理】-->
+    <delete id="delete" parameterClass="hashmap">
+		DELETE FROM T_SYS_REMIND WHERE REMIND_ID = #REMIND_ID#
+	</delete>
+    <!--修改【提醒管理】-->
+	<update id="update" parameterClass="hashmap">
+		UPDATE  T_SYS_REMIND SET SYS_NAME = #SYS_NAME:VARCHAR#,LINK_ADDR = #LINK_ADDR:VARCHAR#,USER_ID = #USER_ID:VARCHAR#,REMIND_SIZE = #REMIND_SIZE:INTEGER#
+		WHERE  REMIND_ID = #REMIND_ID#
+	</update>
+	<!-- 查询【提醒管理】通过用户ID，地址 -->
+	<select id="selectByUserIdAndAddr" parameterClass="hashmap" resultClass="hashmap">
+    	SELECT A.REMIND_ID,A.SYS_NAME,A.LINK_ADDR,A.USER_ID,A.REMIND_SIZE FROM T_SYS_REMIND A WHERE A.USER_ID = #USER_ID# AND A.LINK_ADDR = #LINK_ADDR#
+    </select>
+    <!-- 获取用户未读消息 -->
+	<select id="getUserRemind" parameterClass="hashmap" resultClass="hashmap">
+		SELECT SUM(A.REMIND_SIZE) SUMSIZE FROM T_SYS_REMIND A
+		<isNotEmpty prepend="WHERE" property="USER_ID">
+			A.USER_ID = #USER_ID#
+		</isNotEmpty>
+	</select>
+</sqlMap>
