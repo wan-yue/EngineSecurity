@@ -1,4 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <suite name="权限框架测试集">
-	    <test alias="用户信息信息信息" class="com.flying.test.sys.TestSysUserinfo"/>
-  <test alias="角色管理" class="com.flying.test.sys.TestSysRole"/></suite>
+	<test alias="用户信息信息信息" class="com.flying.test.sys.TestSysUserinfo" />
+	<test alias="角色管理" class="com.flying.test.sys.TestSysRole" />
+	<test alias="" class="com.flying.test.sys.TestSysDepartment" />
+	<test alias="" class="com.flying.test.sys.TestSysGb18030" />
+	<test alias="" class="com.flying.test.sys.TestSysGb2312" />
+	<test alias="" class="com.flying.test.sys.TestSysGroup" />
+	<test alias="" class="com.flying.test.sys.TestSysMessage" />
+	<test alias="" class="com.flying.test.sys.TestSysPerson" />
+	<test alias="" class="com.flying.test.sys.TestSysRemind" />
+	<test alias="" class="com.flying.test.sys.TestSysResource" />
+	<test alias="" class="com.flying.test.sys.TestSysResourcerole" />
+	<test alias="" class="com.flying.test.sys.TestSysResourcetype" />
+	<test alias="" class="com.flying.test.sys.TestSysRoletype" />
+	<test alias="" class="com.flying.test.sys.TestSysUserresource" />
+	<test alias="" class="com.flying.test.sys.TestSysUserrole" />
+</suite>
