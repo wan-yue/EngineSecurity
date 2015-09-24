@@ -132,7 +132,6 @@
 	<servlet>
 		<servlet-name>XFireServlet</servlet-name>
 		<servlet-class>com.flying.view.xfire.XfireServlet</servlet-class>
-		<load-on-startup>2</load-on-startup>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>XFireServlet</servlet-name>
